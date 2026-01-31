@@ -1,28 +1,60 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown } from 'lucide-react';
-import { doctors } from '@/data/doctors';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
+import { doctors, getDoctorBySlug } from '@/data/doctors';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageToggle from './LanguageToggle';
 
 const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDoctorsDropdownOpen, setIsDoctorsDropdownOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { slug } = useParams<{ slug: string }>();
   const { language, t } = useLanguage();
 
-  const isActive = (path: string) => location.pathname === path;
+  // Get current doctor if on doctor profile page
+  const currentDoctor = slug ? getDoctorBySlug(slug) : null;
+  const isHomePage = location.pathname === '/';
 
-  const navItems = [
-    { path: '/', label_en: 'Home', label_bn: 'হোম' },
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Navigation items for doctor profile page
+  const doctorNavItems = [
+    { id: 'home', label_en: 'Home', label_bn: 'হোম', href: '#' },
+    { id: 'about', label_en: 'About', label_bn: 'সম্পর্কে', href: '#about' },
+    { id: 'services', label_en: 'Specialties', label_bn: 'বিশেষত্ব', href: '#services' },
+    { id: 'locations', label_en: 'Chamber', label_bn: 'চেম্বার', href: '#locations' },
   ];
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      if (href === '#') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 glass">
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md' : 'bg-transparent'
+    }`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
+          {/* Logo / Doctor Name */}
+          <Link to={currentDoctor ? `/doctor/${currentDoctor.slug}` : '/'} className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
               <svg
                 viewBox="0 0 24 24"
@@ -35,68 +67,77 @@ const Header: React.FC = () => {
               </svg>
             </div>
             <div className="hidden sm:block">
-              <p className={`text-lg font-bold text-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
-                {t('Doctor Directory', 'ডাক্তার ডিরেক্টরি')}
-              </p>
-              <p className={`text-xs text-muted-foreground uppercase tracking-wider ${language === 'bn' ? 'font-bangla' : ''}`}>
-                {t('Medical Specialists', 'মেডিকেল বিশেষজ্ঞ')}
-              </p>
+              {currentDoctor ? (
+                <>
+                  <p className={`text-lg font-bold text-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    {language === 'en' ? currentDoctor.name_en : currentDoctor.name_bn}
+                  </p>
+                  <p className={`text-xs text-muted-foreground uppercase tracking-wider ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    {language === 'en' ? currentDoctor.specialist_en.toUpperCase() : currentDoctor.specialist_bn}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className={`text-lg font-bold text-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    {t('Doctor Directory', 'ডাক্তার ডিরেক্টরি')}
+                  </p>
+                  <p className={`text-xs text-muted-foreground uppercase tracking-wider ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    {t('Medical Specialists', 'মেডিকেল বিশেষজ্ঞ')}
+                  </p>
+                </>
+              )}
             </div>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  isActive(item.path) ? 'text-primary' : 'text-foreground'
-                } ${language === 'bn' ? 'font-bangla' : ''}`}
-              >
-                {language === 'en' ? item.label_en : item.label_bn}
-              </Link>
-            ))}
-
-            {/* Doctors Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setIsDoctorsDropdownOpen(!isDoctorsDropdownOpen)}
-                onBlur={() => setTimeout(() => setIsDoctorsDropdownOpen(false), 200)}
-                className={`flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary ${language === 'bn' ? 'font-bangla' : ''}`}
-              >
-                {t('Doctors', 'ডাক্তার')}
-                <ChevronDown className={`w-4 h-4 transition-transform ${isDoctorsDropdownOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              {isDoctorsDropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-64 py-2 bg-card rounded-xl shadow-lg border border-border animate-fade-in-up">
-                  {doctors.map((doctor) => (
-                    <Link
-                      key={doctor.id}
-                      to={`/doctor/${doctor.slug}`}
-                      className={`block px-4 py-3 hover:bg-secondary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}
-                    >
-                      <p className="font-medium text-foreground">
-                        {language === 'en' ? doctor.name_en : doctor.name_bn}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {language === 'en' ? doctor.specialist_en : doctor.specialist_bn}
-                      </p>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+            {currentDoctor ? (
+              // Doctor profile navigation
+              <>
+                {doctorNavItems.map((item) => (
+                  <a
+                    key={item.id}
+                    href={item.href}
+                    onClick={(e) => handleNavClick(e, item.href)}
+                    className={`text-sm font-medium transition-colors hover:text-primary text-foreground ${language === 'bn' ? 'font-bangla' : ''}`}
+                  >
+                    {language === 'en' ? item.label_en : item.label_bn}
+                  </a>
+                ))}
+              </>
+            ) : (
+              // Home page navigation
+              <>
+                <Link
+                  to="/"
+                  className={`text-sm font-medium transition-colors hover:text-primary ${
+                    location.pathname === '/' ? 'text-primary' : 'text-foreground'
+                  }`}
+                >
+                  {t('Home', 'হোম')}
+                </Link>
+                
+                {/* Quick access to first doctor for demo */}
+                {doctors.length > 0 && (
+                  <Link
+                    to={`/doctor/${doctors[0].slug}`}
+                    className="text-sm font-medium transition-colors hover:text-primary text-foreground"
+                  >
+                    {t('Our Doctors', 'আমাদের ডাক্তার')}
+                  </Link>
+                )}
+              </>
+            )}
 
             <LanguageToggle />
 
-            <Link
-              to="/#booking"
-              className="btn-primary-gradient px-5 py-2.5 rounded-full text-sm font-medium"
+            <a
+              href={currentDoctor ? '#booking' : '/'}
+              onClick={(e) => currentDoctor && handleNavClick(e, '#booking')}
+              className={`btn-primary-gradient px-5 py-2.5 rounded-full text-sm font-medium ${language === 'bn' ? 'font-bangla' : ''}`}
             >
               {t('Book Appointment', 'অ্যাপয়েন্টমেন্ট বুক করুন')}
-            </Link>
+            </a>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -114,47 +155,66 @@ const Header: React.FC = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-border animate-fade-in-up">
+          <div className="md:hidden py-4 border-t border-border animate-fade-in bg-background/95 backdrop-blur-lg">
             <nav className="flex flex-col gap-2">
-              {navItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                    isActive(item.path)
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-foreground hover:bg-secondary'
-                  } ${language === 'bn' ? 'font-bangla' : ''}`}
-                >
-                  {language === 'en' ? item.label_en : item.label_bn}
-                </Link>
-              ))}
-
-              {/* Mobile Doctors List */}
-              <div className="px-4 py-2">
-                <p className={`text-xs font-medium text-muted-foreground uppercase mb-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
-                  {t('Our Doctors', 'আমাদের ডাক্তার')}
-                </p>
-                {doctors.map((doctor) => (
+              {currentDoctor ? (
+                // Doctor profile mobile nav
+                <>
+                  {doctorNavItems.map((item) => (
+                    <a
+                      key={item.id}
+                      href={item.href}
+                      onClick={(e) => handleNavClick(e, item.href)}
+                      className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors text-foreground hover:bg-secondary ${language === 'bn' ? 'font-bangla' : ''}`}
+                    >
+                      {language === 'en' ? item.label_en : item.label_bn}
+                    </a>
+                  ))}
+                </>
+              ) : (
+                // Home page mobile nav
+                <>
                   <Link
-                    key={doctor.id}
-                    to={`/doctor/${doctor.slug}`}
+                    to="/"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`block py-2 text-sm text-foreground hover:text-primary ${language === 'bn' ? 'font-bangla' : ''}`}
+                    className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                      location.pathname === '/'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-foreground hover:bg-secondary'
+                    } ${language === 'bn' ? 'font-bangla' : ''}`}
                   >
-                    {language === 'en' ? doctor.name_en : doctor.name_bn}
+                    {t('Home', 'হোম')}
                   </Link>
-                ))}
-              </div>
+                  
+                  {/* Mobile Doctors List */}
+                  <div className="px-4 py-2">
+                    <p className={`text-xs font-medium text-muted-foreground uppercase mb-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                      {t('Our Doctors', 'আমাদের ডাক্তার')}
+                    </p>
+                    {doctors.map((doctor) => (
+                      <Link
+                        key={doctor.id}
+                        to={`/doctor/${doctor.slug}`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={`block py-2 text-sm text-foreground hover:text-primary ${language === 'bn' ? 'font-bangla' : ''}`}
+                      >
+                        {language === 'en' ? doctor.name_en : doctor.name_bn}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              )}
 
-              <Link
-                to="/#booking"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`mx-4 btn-primary-gradient px-5 py-3 rounded-full text-sm font-medium text-center ${language === 'bn' ? 'font-bangla' : ''}`}
+              <a
+                href={currentDoctor ? '#booking' : '/'}
+                onClick={(e) => {
+                  if (currentDoctor) handleNavClick(e, '#booking');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`mx-4 mt-2 btn-primary-gradient px-5 py-3 rounded-full text-sm font-medium text-center ${language === 'bn' ? 'font-bangla' : ''}`}
               >
                 {t('Book Appointment', 'অ্যাপয়েন্টমেন্ট বুক করুন')}
-              </Link>
+              </a>
             </nav>
           </div>
         )}
