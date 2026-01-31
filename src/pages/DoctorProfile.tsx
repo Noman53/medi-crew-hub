@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { useParams, Link, Navigate } from 'react-router-dom';
+import React from 'react';
+import { useParams, Navigate } from 'react-router-dom';
 import { getDoctorBySlug } from '@/data/doctors';
 import { useLanguage } from '@/contexts/LanguageContext';
 import {
-  ArrowLeft,
   Phone,
   MapPin,
   Clock,
@@ -13,6 +12,8 @@ import {
   Award,
   CheckCircle,
 } from 'lucide-react';
+import FloatingContactIcons from '@/components/FloatingContactIcons';
+import BookingWizard from '@/components/BookingWizard';
 
 // Specialty icons mapping
 const getSpecialtyIcon = (iconName: string) => {
@@ -81,7 +82,6 @@ const getSpecialtyIcon = (iconName: string) => {
 const DoctorProfile: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { language, t } = useLanguage();
-  const [selectedDate, setSelectedDate] = useState<number | null>(null);
 
   const doctor = getDoctorBySlug(slug || '');
 
@@ -89,36 +89,13 @@ const DoctorProfile: React.FC = () => {
     return <Navigate to="/" replace />;
   }
 
-  // Generate calendar days for current month
-  const today = new Date();
-  const currentMonth = today.getMonth();
-  const currentYear = today.getFullYear();
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
-  
-  const monthNames = language === 'en' 
-    ? ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    : ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
-
-  const dayNames = language === 'en'
-    ? ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
-    : ['রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহঃ', 'শুক্র', 'শনি'];
-
   return (
     <div className="min-h-screen bg-background">
+      {/* Floating Contact Icons */}
+      <FloatingContactIcons phone={doctor.contact.phone} whatsapp={doctor.contact.whatsapp} />
+
       {/* Hero Section */}
       <section className="relative hero-gradient overflow-hidden">
-        {/* Back Button */}
-        <div className="container mx-auto px-4 pt-6">
-          <Link
-            to="/"
-            className={`inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}
-          >
-            <ArrowLeft className="w-4 h-4" />
-            {t('Back to Doctors', 'ডাক্তার তালিকায় ফিরে যান')}
-          </Link>
-        </div>
-
         <div className="container mx-auto px-4 py-12 md:py-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
@@ -136,7 +113,9 @@ const DoctorProfile: React.FC = () => {
                 <span className="text-foreground">{t('Expert Care for', 'বিশেষজ্ঞ যত্ন')} </span>
                 <br />
                 <span className="text-gradient">
-                  {language === 'en' ? doctor.hero_tagline_en.replace('Expert Care for ', '') : doctor.hero_tagline_bn.replace('বিশেষজ্ঞ যত্ন ', '')}
+                  {language === 'en' 
+                    ? doctor.hero_tagline_en.replace('Expert Care for ', '') 
+                    : doctor.hero_tagline_bn.replace('বিশেষজ্ঞ যত্ন ', '')}
                 </span>
               </h1>
 
@@ -188,21 +167,25 @@ const DoctorProfile: React.FC = () => {
                   />
                 </div>
 
-                {/* Info Card */}
-                <div className="absolute -bottom-4 -right-4 md:bottom-4 md:right-0 glass rounded-xl p-4 shadow-lg max-w-[200px]">
-                  <p className={`font-bold text-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
-                    {language === 'en' ? doctor.name_en : doctor.name_bn}
-                  </p>
-                  <p className={`text-xs text-primary ${language === 'bn' ? 'font-bangla' : ''}`}>
-                    {language === 'en' ? doctor.title_en : doctor.title_bn}
-                  </p>
-                  <p className={`text-xs text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
-                    {language === 'en' ? doctor.institution_en : doctor.institution_bn}
-                  </p>
-                  <div className="mt-2 flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
-                      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                    </svg>
+                {/* Info Card - positioned like reference */}
+                <div className="absolute bottom-8 -right-4 md:bottom-12 md:-right-8 glass rounded-xl p-4 shadow-lg max-w-[220px]">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className={`font-bold text-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
+                        {language === 'en' ? doctor.name_en : doctor.name_bn}
+                      </p>
+                      <p className={`text-xs text-primary ${language === 'bn' ? 'font-bangla' : ''}`}>
+                        {language === 'en' ? doctor.title_en : doctor.title_bn}
+                      </p>
+                      <p className={`text-xs text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
+                        {language === 'en' ? doctor.institution_en : doctor.institution_bn}
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground flex-shrink-0">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -226,7 +209,7 @@ const DoctorProfile: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className={`text-3xl md:text-4xl font-bold ${language === 'bn' ? 'font-bangla' : ''}`}>
-              {t(`Why Choose ${doctor.name_en.split(' ').pop()}?`, `কেন ${doctor.name_bn.split(' ').pop()} বেছে নেবেন?`)}
+              {t(`Why Choose Dr. ${doctor.name_en.split(' ').pop()}?`, `কেন ডাঃ ${doctor.name_bn.split(' ').pop()} বেছে নেবেন?`)}
             </h2>
             <p className={`text-muted-foreground mt-3 max-w-2xl mx-auto ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t('Modern surgical care with advanced techniques and patient-centric approach.', 'উন্নত কৌশল এবং রোগী-কেন্দ্রিক পদ্ধতির সাথে আধুনিক অস্ত্রোপচার যত্ন।')}
@@ -240,21 +223,18 @@ const DoctorProfile: React.FC = () => {
                 title_bn: 'উন্নত সার্জারি',
                 desc_en: 'Specialized in Hepatobiliary surgery for complex liver and bile duct disorders.',
                 desc_bn: 'জটিল লিভার এবং পিত্তনালীর ব্যাধির জন্য হেপাটোবিলিয়ারি সার্জারিতে বিশেষজ্ঞ।',
-                icon: 'surgery',
               },
               {
                 title_en: 'Minimally Invasive',
                 title_bn: 'ন্যূনতম আক্রমণাত্মক',
                 desc_en: 'Laparoscopic techniques ensuring smaller incisions, less pain, and quicker recovery.',
                 desc_bn: 'ল্যাপারোস্কপিক কৌশল ছোট ছেদ, কম ব্যথা এবং দ্রুত পুনরুদ্ধার নিশ্চিত করে।',
-                icon: 'minimally',
               },
               {
                 title_en: 'Patient-Centric',
                 title_bn: 'রোগী-কেন্দ্রিক',
                 desc_en: `Providing compassionate consultations at ${doctor.chamber.name_en}.`,
                 desc_bn: `${doctor.chamber.name_bn}-এ সহানুভূতিশীল পরামর্শ প্রদান।`,
-                icon: 'patient',
               },
             ].map((item, index) => (
               <div
@@ -279,7 +259,7 @@ const DoctorProfile: React.FC = () => {
       </section>
 
       {/* About Doctor Section */}
-      <section className="py-16 md:py-24 bg-secondary/30">
+      <section className="py-16 md:py-24 bg-secondary/30" id="about">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Image */}
@@ -391,7 +371,7 @@ const DoctorProfile: React.FC = () => {
               {t('Chamber', 'চেম্বার')}
             </span>
             <h2 className={`text-3xl md:text-4xl font-bold mt-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
-              {t(`Visit ${doctor.name_en.split(' ').pop()}`, `${doctor.name_bn.split(' ').pop()} কে দেখুন`)}
+              {t(`Visit Dr. ${doctor.name_en.split(' ').pop()}`, `ডাঃ ${doctor.name_bn.split(' ').pop()} কে দেখুন`)}
             </h2>
             <p className={`text-muted-foreground mt-3 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t(`Book your consultation at ${doctor.chamber.name_en}.`, `${doctor.chamber.name_bn}-এ আপনার পরামর্শ বুক করুন।`)}
@@ -478,101 +458,29 @@ const DoctorProfile: React.FC = () => {
             </p>
           </div>
 
-          {/* Steps */}
-          <div className="flex justify-center gap-8 mb-8">
-            {[
-              { num: '1', label_en: 'Date', label_bn: 'তারিখ' },
-              { num: '2', label_en: 'Time', label_bn: 'সময়' },
-              { num: '3', label_en: 'Details', label_bn: 'বিবরণ' },
-            ].map((step, index) => (
-              <div key={step.num} className="flex items-center gap-2">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                  index === 0 ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
-                }`}>
-                  {step.num}
-                </div>
-                <span className={`text-sm font-medium ${index === 0 ? 'text-foreground' : 'text-muted-foreground'} ${language === 'bn' ? 'font-bangla' : ''}`}>
-                  {language === 'en' ? step.label_en : step.label_bn}
-                </span>
-              </div>
-            ))}
-          </div>
+          <BookingWizard 
+            doctorName={language === 'en' ? doctor.name_en : doctor.name_bn}
+            closedDay={doctor.chamber.closed_day_en}
+          />
 
-          {/* Calendar */}
-          <div className="max-w-md mx-auto">
-            <div className="card-elevated p-6">
-              <div className="flex items-center justify-between mb-4">
-                <button className="text-muted-foreground hover:text-foreground transition-colors">
-                  ← {t('previous month', 'আগের মাস')}
-                </button>
-                <h3 className={`text-lg font-bold ${language === 'bn' ? 'font-bangla' : ''}`}>
-                  {monthNames[currentMonth]} {currentYear}
-                </h3>
-                <button className="text-muted-foreground hover:text-foreground transition-colors">
-                  {t('next month', 'পরের মাস')} →
-                </button>
-              </div>
-
-              {/* Day headers */}
-              <div className="grid grid-cols-7 gap-1 mb-2">
-                {dayNames.map((day) => (
-                  <div key={day} className={`text-center text-xs font-medium text-muted-foreground py-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
-                    {day}
-                  </div>
-                ))}
-              </div>
-
-              {/* Calendar grid */}
-              <div className="grid grid-cols-7 gap-1">
-                {/* Empty cells for days before the first of the month */}
-                {Array.from({ length: firstDayOfMonth }).map((_, index) => (
-                  <div key={`empty-${index}`} className="aspect-square" />
-                ))}
-                
-                {/* Actual days */}
-                {Array.from({ length: daysInMonth }).map((_, index) => {
-                  const day = index + 1;
-                  const isFriday = (firstDayOfMonth + index) % 7 === 5;
-                  const isPast = day < today.getDate();
-                  
-                  return (
-                    <button
-                      key={day}
-                      onClick={() => !isFriday && !isPast && setSelectedDate(day)}
-                      disabled={isFriday || isPast}
-                      className={`aspect-square rounded-lg flex items-center justify-center text-sm font-medium transition-all
-                        ${selectedDate === day ? 'bg-primary text-primary-foreground' : ''}
-                        ${isFriday ? 'text-destructive/50 cursor-not-allowed' : ''}
-                        ${isPast ? 'text-muted-foreground/50 cursor-not-allowed' : ''}
-                        ${!isFriday && !isPast && selectedDate !== day ? 'hover:bg-primary/10 text-foreground' : ''}
-                      `}
-                    >
-                      {day}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Contact Buttons */}
-            <div className="mt-6 flex flex-col sm:flex-row gap-4">
-              <a
-                href={`tel:${doctor.contact.phone}`}
-                className={`flex-1 btn-primary-gradient px-6 py-3 rounded-full font-medium inline-flex items-center justify-center gap-2 ${language === 'bn' ? 'font-bangla' : ''}`}
-              >
-                <Phone className="w-5 h-5" />
-                {t('Call Now', 'এখনই কল করুন')}
-              </a>
-              <a
-                href={`https://wa.me/${doctor.contact.whatsapp.replace(/\+/g, '')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`flex-1 px-6 py-3 rounded-full font-medium border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors inline-flex items-center justify-center gap-2 ${language === 'bn' ? 'font-bangla' : ''}`}
-              >
-                <MessageCircle className="w-5 h-5" />
-                {t('WhatsApp', 'হোয়াটসঅ্যাপ')}
-              </a>
-            </div>
+          {/* Quick Contact Buttons */}
+          <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+            <a
+              href={`tel:${doctor.contact.phone}`}
+              className={`flex-1 btn-primary-gradient px-6 py-3 rounded-full font-medium inline-flex items-center justify-center gap-2 ${language === 'bn' ? 'font-bangla' : ''}`}
+            >
+              <Phone className="w-5 h-5" />
+              {t('Call Now', 'এখনই কল করুন')}
+            </a>
+            <a
+              href={`https://wa.me/${doctor.contact.whatsapp.replace(/\+/g, '')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`flex-1 px-6 py-3 rounded-full font-medium border-2 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white transition-colors inline-flex items-center justify-center gap-2 ${language === 'bn' ? 'font-bangla' : ''}`}
+            >
+              <MessageCircle className="w-5 h-5" />
+              {t('WhatsApp', 'হোয়াটসঅ্যাপ')}
+            </a>
           </div>
         </div>
       </section>
