@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { doctors, getDoctorBySlug } from '@/data/doctors';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageToggle from './LanguageToggle';
@@ -8,13 +8,14 @@ import LanguageToggle from './LanguageToggle';
 const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isDoctorsDropdownOpen, setIsDoctorsDropdownOpen] = useState(false);
   const location = useLocation();
   const { slug } = useParams<{ slug: string }>();
   const { language, t } = useLanguage();
 
   // Get current doctor if on doctor profile page
   const currentDoctor = slug ? getDoctorBySlug(slug) : null;
-  const isHomePage = location.pathname === '/';
+  const isProfilePage = !!currentDoctor;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,9 +25,14 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Navigation items for doctor profile page
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location]);
+
+  // Navigation items for doctor profile page (same as reference)
   const doctorNavItems = [
-    { id: 'home', label_en: 'Home', label_bn: 'হোম', href: '#' },
+    { id: 'home', label_en: 'Home', label_bn: 'হোম', href: '#top' },
     { id: 'about', label_en: 'About', label_bn: 'সম্পর্কে', href: '#about' },
     { id: 'services', label_en: 'Specialties', label_bn: 'বিশেষত্ব', href: '#services' },
     { id: 'locations', label_en: 'Chamber', label_bn: 'চেম্বার', href: '#locations' },
@@ -35,7 +41,7 @@ const Header: React.FC = () => {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith('#')) {
       e.preventDefault();
-      if (href === '#') {
+      if (href === '#top') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         const element = document.querySelector(href);
@@ -48,14 +54,28 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md' : 'bg-transparent'
-    }`}>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? 'bg-background/95 backdrop-blur-md shadow-md py-2'
+          : 'bg-transparent py-4'
+      }`}
+    >
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo / Doctor Name */}
-          <Link to={currentDoctor ? `/doctor/${currentDoctor.slug}` : '/'} className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
+        <div className="flex items-center justify-between">
+          {/* Logo / Doctor Branding */}
+          <Link
+            to={isProfilePage ? `/doctor/${currentDoctor.slug}` : '/'}
+            onClick={(e) => {
+              if (isProfilePage) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
+            className="flex items-center gap-3"
+          >
+            {/* Medical Icon */}
+            <div className="w-10 h-10 md:w-11 md:h-11 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
@@ -66,23 +86,25 @@ const Header: React.FC = () => {
                 <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
               </svg>
             </div>
+
+            {/* Title */}
             <div className="hidden sm:block">
-              {currentDoctor ? (
+              {isProfilePage ? (
                 <>
-                  <p className={`text-lg font-bold text-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
+                  <p className={`text-base md:text-lg font-bold text-foreground leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
                     {language === 'en' ? currentDoctor.name_en : currentDoctor.name_bn}
                   </p>
-                  <p className={`text-xs text-muted-foreground uppercase tracking-wider ${language === 'bn' ? 'font-bangla' : ''}`}>
+                  <p className={`text-[10px] md:text-xs text-muted-foreground uppercase tracking-widest font-medium ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
                     {language === 'en' ? currentDoctor.specialist_en.toUpperCase() : currentDoctor.specialist_bn}
                   </p>
                 </>
               ) : (
                 <>
-                  <p className={`text-lg font-bold text-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
+                  <p className={`text-base md:text-lg font-bold text-foreground leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
                     {t('Doctor Directory', 'ডাক্তার ডিরেক্টরি')}
                   </p>
-                  <p className={`text-xs text-muted-foreground uppercase tracking-wider ${language === 'bn' ? 'font-bangla' : ''}`}>
-                    {t('Medical Specialists', 'মেডিকেল বিশেষজ্ঞ')}
+                  <p className={`text-[10px] md:text-xs text-muted-foreground uppercase tracking-widest font-medium ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
+                    {t('MEDICAL SPECIALISTS', 'মেডিকেল বিশেষজ্ঞ')}
                   </p>
                 </>
               )}
@@ -90,62 +112,87 @@ const Header: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
-            {currentDoctor ? (
-              // Doctor profile navigation
-              <>
-                {doctorNavItems.map((item) => (
-                  <a
-                    key={item.id}
-                    href={item.href}
-                    onClick={(e) => handleNavClick(e, item.href)}
-                    className={`text-sm font-medium transition-colors hover:text-primary text-foreground ${language === 'bn' ? 'font-bangla' : ''}`}
-                  >
-                    {language === 'en' ? item.label_en : item.label_bn}
-                  </a>
-                ))}
-              </>
+          <nav className="hidden lg:flex items-center gap-1">
+            {isProfilePage ? (
+              // Doctor profile navigation - smooth scroll
+              doctorNavItems.map((item) => (
+                <a
+                  key={item.id}
+                  href={item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  className={`px-4 py-2 text-sm font-medium text-foreground/80 hover:text-primary rounded-lg hover:bg-primary/5 transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}
+                >
+                  {language === 'en' ? item.label_en : item.label_bn}
+                </a>
+              ))
             ) : (
               // Home page navigation
               <>
                 <Link
                   to="/"
-                  className={`text-sm font-medium transition-colors hover:text-primary ${
-                    location.pathname === '/' ? 'text-primary' : 'text-foreground'
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                    location.pathname === '/'
+                      ? 'text-primary'
+                      : 'text-foreground/80 hover:text-primary hover:bg-primary/5'
                   }`}
                 >
                   {t('Home', 'হোম')}
                 </Link>
-                
-                {/* Quick access to first doctor for demo */}
-                {doctors.length > 0 && (
-                  <Link
-                    to={`/doctor/${doctors[0].slug}`}
-                    className="text-sm font-medium transition-colors hover:text-primary text-foreground"
+
+                {/* Doctors Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => setIsDoctorsDropdownOpen(!isDoctorsDropdownOpen)}
+                    onBlur={() => setTimeout(() => setIsDoctorsDropdownOpen(false), 150)}
+                    className={`px-4 py-2 text-sm font-medium text-foreground/80 hover:text-primary rounded-lg hover:bg-primary/5 transition-colors inline-flex items-center gap-1 ${language === 'bn' ? 'font-bangla' : ''}`}
                   >
                     {t('Our Doctors', 'আমাদের ডাক্তার')}
-                  </Link>
-                )}
+                    <ChevronDown className={`w-4 h-4 transition-transform ${isDoctorsDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {isDoctorsDropdownOpen && (
+                    <div className="absolute top-full left-0 mt-1 w-64 bg-background rounded-xl shadow-xl border border-border py-2 animate-fade-in z-50">
+                      {doctors.map((doctor) => (
+                        <Link
+                          key={doctor.id}
+                          to={`/doctor/${doctor.slug}`}
+                          className={`block px-4 py-2.5 text-sm hover:bg-primary/5 hover:text-primary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}
+                        >
+                          <span className="font-medium">
+                            {language === 'en' ? doctor.name_en : doctor.name_bn}
+                          </span>
+                          <span className="block text-xs text-muted-foreground mt-0.5">
+                            {language === 'en' ? doctor.specialist_en : doctor.specialist_bn}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </>
             )}
 
-            <LanguageToggle />
+            {/* Language Toggle */}
+            <div className="ml-2">
+              <LanguageToggle />
+            </div>
 
+            {/* Book Appointment Button */}
             <a
-              href={currentDoctor ? '#booking' : '/'}
-              onClick={(e) => currentDoctor && handleNavClick(e, '#booking')}
-              className={`btn-primary-gradient px-5 py-2.5 rounded-full text-sm font-medium ${language === 'bn' ? 'font-bangla' : ''}`}
+              href={isProfilePage ? '#booking' : doctors.length > 0 ? `/doctor/${doctors[0].slug}#booking` : '/'}
+              onClick={(e) => isProfilePage && handleNavClick(e, '#booking')}
+              className={`ml-2 btn-primary-gradient px-5 py-2.5 rounded-full text-sm font-medium ${language === 'bn' ? 'font-bangla' : ''}`}
             >
-              {t('Book Appointment', 'অ্যাপয়েন্টমেন্ট বুক করুন')}
+              {t('Book Appointment', 'অ্যাপয়েন্টমেন্ট')}
             </a>
           </nav>
 
-          {/* Mobile Menu Button */}
-          <div className="flex items-center gap-3 md:hidden">
+          {/* Mobile Controls */}
+          <div className="flex items-center gap-2 lg:hidden">
             <LanguageToggle />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 text-foreground"
+              className="p-2 text-foreground hover:bg-muted rounded-lg transition-colors"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -155,48 +202,44 @@ const Header: React.FC = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-border animate-fade-in bg-background/95 backdrop-blur-lg">
-            <nav className="flex flex-col gap-2">
-              {currentDoctor ? (
+          <div className="lg:hidden mt-4 pb-4 border-t border-border pt-4 animate-fade-in">
+            <nav className="flex flex-col gap-1">
+              {isProfilePage ? (
                 // Doctor profile mobile nav
-                <>
-                  {doctorNavItems.map((item) => (
-                    <a
-                      key={item.id}
-                      href={item.href}
-                      onClick={(e) => handleNavClick(e, item.href)}
-                      className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors text-foreground hover:bg-secondary ${language === 'bn' ? 'font-bangla' : ''}`}
-                    >
-                      {language === 'en' ? item.label_en : item.label_bn}
-                    </a>
-                  ))}
-                </>
+                doctorNavItems.map((item) => (
+                  <a
+                    key={item.id}
+                    href={item.href}
+                    onClick={(e) => handleNavClick(e, item.href)}
+                    className={`px-4 py-3 rounded-lg text-sm font-medium text-foreground hover:bg-primary/5 hover:text-primary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}
+                  >
+                    {language === 'en' ? item.label_en : item.label_bn}
+                  </a>
+                ))
               ) : (
                 // Home page mobile nav
                 <>
                   <Link
                     to="/"
-                    onClick={() => setIsMobileMenuOpen(false)}
                     className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                       location.pathname === '/'
                         ? 'bg-primary text-primary-foreground'
-                        : 'text-foreground hover:bg-secondary'
+                        : 'text-foreground hover:bg-primary/5'
                     } ${language === 'bn' ? 'font-bangla' : ''}`}
                   >
                     {t('Home', 'হোম')}
                   </Link>
-                  
-                  {/* Mobile Doctors List */}
+
+                  {/* Doctors List */}
                   <div className="px-4 py-2">
-                    <p className={`text-xs font-medium text-muted-foreground uppercase mb-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    <p className={`text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2 ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
                       {t('Our Doctors', 'আমাদের ডাক্তার')}
                     </p>
                     {doctors.map((doctor) => (
                       <Link
                         key={doctor.id}
                         to={`/doctor/${doctor.slug}`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={`block py-2 text-sm text-foreground hover:text-primary ${language === 'bn' ? 'font-bangla' : ''}`}
+                        className={`block py-2.5 text-sm text-foreground hover:text-primary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}
                       >
                         {language === 'en' ? doctor.name_en : doctor.name_bn}
                       </Link>
@@ -205,15 +248,16 @@ const Header: React.FC = () => {
                 </>
               )}
 
+              {/* Book Appointment Mobile */}
               <a
-                href={currentDoctor ? '#booking' : '/'}
+                href={isProfilePage ? '#booking' : doctors.length > 0 ? `/doctor/${doctors[0].slug}#booking` : '/'}
                 onClick={(e) => {
-                  if (currentDoctor) handleNavClick(e, '#booking');
+                  if (isProfilePage) handleNavClick(e, '#booking');
                   setIsMobileMenuOpen(false);
                 }}
-                className={`mx-4 mt-2 btn-primary-gradient px-5 py-3 rounded-full text-sm font-medium text-center ${language === 'bn' ? 'font-bangla' : ''}`}
+                className={`mx-4 mt-3 btn-primary-gradient px-5 py-3 rounded-full text-sm font-medium text-center ${language === 'bn' ? 'font-bangla' : ''}`}
               >
-                {t('Book Appointment', 'অ্যাপয়েন্টমেন্ট বুক করুন')}
+                {t('Book Appointment', 'অ্যাপয়েন্টমেন্ট')}
               </a>
             </nav>
           </div>
