@@ -84,18 +84,18 @@ const Home: React.FC = () => {
           </svg>
         </div>
 
-        <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
+        <div className="container mx-auto px-4 py-20 md:py-28 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6 animate-fade-in-up">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-primary" />
               <span className={`text-sm font-medium text-primary ${language === 'bn' ? 'font-bangla' : ''}`}>
                 {t('Trusted Medical Directory', 'বিশ্বস্ত মেডিকেল ডিরেক্টরি')}
               </span>
             </div>
 
             {/* Main Heading */}
-            <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in-up ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in-up leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
               <span className="text-foreground">{t('Find Your', 'আপনার')} </span>
               <span className="text-gradient">{t('Expert Doctor', 'বিশেষজ্ঞ ডাক্তার')}</span>
               <br />
@@ -103,7 +103,7 @@ const Home: React.FC = () => {
             </h1>
 
             {/* Subtitle */}
-            <p className={`text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-in-up delay-100 ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <p className={`text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto animate-fade-in-up leading-relaxed ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t(
                 'Connect with Bangladesh\'s finest medical specialists. Book appointments with experienced doctors across multiple specialties.',
                 'বাংলাদেশের সেরা চিকিৎসা বিশেষজ্ঞদের সাথে সংযুক্ত হন। বিভিন্ন বিশেষত্বে অভিজ্ঞ ডাক্তারদের সাথে অ্যাপয়েন্টমেন্ট বুক করুন।'
@@ -111,7 +111,7 @@ const Home: React.FC = () => {
             </p>
 
             {/* Search Bar */}
-            <div className="animate-fade-in-up delay-200">
+            <div className="animate-fade-in-up">
               <SearchBar
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
@@ -123,7 +123,7 @@ const Home: React.FC = () => {
         </div>
 
         {/* Wave Divider */}
-        <div className="wave-divider">
+        <div className="absolute bottom-0 left-0 right-0 overflow-hidden leading-none">
           <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-16 md:h-24">
             <path
               d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.11,140.83,94.17,208.18,70.28,287.43,41.73,321.39,56.44,321.39,56.44Z"
@@ -134,19 +134,19 @@ const Home: React.FC = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-12 md:py-16 bg-background">
+      <section className="py-16 md:py-20 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="text-center p-6 rounded-2xl bg-card border border-border hover:shadow-lg transition-shadow"
+                className="text-center p-6 lg:p-8 rounded-2xl bg-card border border-border hover:shadow-lg transition-all duration-300"
               >
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4">
-                  <stat.icon className="w-6 h-6" />
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-primary/10 text-primary mb-4">
+                  <stat.icon className="w-7 h-7" />
                 </div>
-                <p className="text-2xl md:text-3xl font-bold text-foreground">{stat.value}</p>
-                <p className={`text-sm text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
+                <p className="text-3xl md:text-4xl font-bold text-foreground">{stat.value}</p>
+                <p className={`text-sm text-muted-foreground mt-1 ${language === 'bn' ? 'font-bangla' : ''}`}>
                   {language === 'en' ? stat.label_en : stat.label_bn}
                 </p>
               </div>
@@ -156,17 +156,17 @@ const Home: React.FC = () => {
       </section>
 
       {/* Doctors Grid */}
-      <section className="py-12 md:py-20 bg-background" id="doctors">
+      <section className="py-16 md:py-24 bg-background" id="doctors">
         <div className="container mx-auto px-4">
           {/* Section Header */}
           <div className="text-center mb-12">
-            <span className={`text-sm font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <span className={`text-sm font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
               {t('Our Specialists', 'আমাদের বিশেষজ্ঞগণ')}
             </span>
             <h2 className={`text-3xl md:text-4xl font-bold mt-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t('Meet Our Expert Doctors', 'আমাদের বিশেষজ্ঞ ডাক্তারদের সাথে পরিচিত হন')}
             </h2>
-            <p className={`text-muted-foreground mt-3 max-w-2xl mx-auto ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <p className={`text-muted-foreground mt-4 max-w-2xl mx-auto ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t(
                 'Choose from our team of highly qualified medical professionals dedicated to your health.',
                 'আপনার স্বাস্থ্যের জন্য নিবেদিত আমাদের উচ্চ যোগ্যতাসম্পন্ন চিকিৎসা পেশাদারদের দল থেকে বেছে নিন।'
@@ -176,7 +176,7 @@ const Home: React.FC = () => {
 
           {/* Doctors Grid */}
           {filteredDoctors.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
               {filteredDoctors.map((doctor, index) => (
                 <div
                   key={doctor.id}
@@ -188,7 +188,7 @@ const Home: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-12">
+            <div className="text-center py-16">
               <p className={`text-lg text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
                 {t('No doctors found matching your search.', 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো ডাক্তার পাওয়া যায়নি।')}
               </p>
@@ -198,10 +198,10 @@ const Home: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24 hero-gradient">
+      <section className="py-20 md:py-28 hero-gradient">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <h2 className={`text-3xl md:text-4xl font-bold mb-5 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t('Ready to Book Your Appointment?', 'আপনার অ্যাপয়েন্টমেন্ট বুক করতে প্রস্তুত?')}
             </h2>
             <p className={`text-lg text-muted-foreground mb-8 ${language === 'bn' ? 'font-bangla' : ''}`}>
@@ -210,9 +210,12 @@ const Home: React.FC = () => {
                 'আমাদের ডিরেক্টরি থেকে একজন ডাক্তার নির্বাচন করুন এবং আজই আপনার পরামর্শ সিডিউল করুন।'
               )}
             </p>
-            <button className={`btn-primary-gradient px-8 py-4 rounded-full text-lg font-medium ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <a 
+              href="#doctors"
+              className={`btn-primary-gradient px-10 py-4 rounded-full text-lg font-medium inline-block ${language === 'bn' ? 'font-bangla' : ''}`}
+            >
               {t('Browse All Doctors', 'সব ডাক্তার ব্রাউজ করুন')}
-            </button>
+            </a>
           </div>
         </div>
       </section>

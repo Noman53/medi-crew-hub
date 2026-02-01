@@ -12,8 +12,8 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
   const { language, t } = useLanguage();
 
   return (
-    <Link to={`/doctor/${doctor.slug}`} className="group">
-      <div className="doctor-card bg-card border border-border">
+    <Link to={`/doctor/${doctor.slug}`} className="group block">
+      <div className="doctor-card bg-card border border-border overflow-hidden">
         {/* Image Container */}
         <div className="relative overflow-hidden">
           <div className="aspect-[4/3] overflow-hidden">
@@ -24,14 +24,14 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
             />
           </div>
           {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground/90 via-foreground/40 to-transparent" />
           
           {/* Doctor Info Overlay */}
           <div className="absolute bottom-0 left-0 right-0 p-4 text-background">
-            <p className={`text-lg font-bold ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <p className={`text-lg font-bold leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
               {language === 'en' ? doctor.name_en : doctor.name_bn}
             </p>
-            <p className={`text-sm text-background/80 ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <p className={`text-sm text-background/80 mt-0.5 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {language === 'en' ? doctor.title_en : doctor.title_bn}
             </p>
           </div>
@@ -50,13 +50,13 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
           </div>
 
           {/* Institution */}
-          <p className={`text-sm text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
+          <p className={`text-sm text-muted-foreground line-clamp-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
             {language === 'en' ? doctor.institution_en : doctor.institution_bn}
           </p>
 
           {/* View Profile Button */}
           <div className="pt-2">
-            <span className={`inline-flex items-center gap-2 text-sm font-medium text-primary group-hover:gap-3 transition-all ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <span className={`inline-flex items-center gap-2 text-sm font-medium text-primary group-hover:gap-3 transition-all duration-300 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t('View Profile', 'প্রোফাইল দেখুন')}
               <ArrowRight className="w-4 h-4" />
             </span>
