@@ -4,17 +4,30 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import DoctorCard from '@/components/DoctorCard';
 import SearchBar from '@/components/SearchBar';
 import { Stethoscope, Users, Award, Clock } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay: i * 0.1, ease: [0, 0, 0.2, 1] as const },
+  }),
+};
+
+const staggerContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+};
 
 const Home: React.FC = () => {
   const { language, t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('name');
 
-  // Filter and sort doctors
   const filteredDoctors = useMemo(() => {
     let result = [...doctors];
 
-    // Filter by search query
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter((doctor) => {
@@ -24,7 +37,6 @@ const Home: React.FC = () => {
       });
     }
 
-    // Sort doctors
     result.sort((a, b) => {
       if (sortBy === 'name') {
         const nameA = language === 'bn' ? a.name_bn : a.name_en;
@@ -42,37 +54,16 @@ const Home: React.FC = () => {
   }, [doctors, searchQuery, sortBy, language]);
 
   const stats = [
-    {
-      icon: Stethoscope,
-      value: doctors.length.toString(),
-      label_en: 'Expert Doctors',
-      label_bn: 'বিশেষজ্ঞ ডাক্তার',
-    },
-    {
-      icon: Users,
-      value: '10,000+',
-      label_en: 'Happy Patients',
-      label_bn: 'সন্তুষ্ট রোগী',
-    },
-    {
-      icon: Award,
-      value: '15+',
-      label_en: 'Years Experience',
-      label_bn: 'বছরের অভিজ্ঞতা',
-    },
-    {
-      icon: Clock,
-      value: '24/7',
-      label_en: 'Support Available',
-      label_bn: 'সাপোর্ট উপলব্ধ',
-    },
+    { icon: Stethoscope, value: doctors.length.toString(), label_en: 'Expert Doctors', label_bn: 'বিশেষজ্ঞ ডাক্তার' },
+    { icon: Users, value: '10,000+', label_en: 'Happy Patients', label_bn: 'সন্তুষ্ট রোগী' },
+    { icon: Award, value: '15+', label_en: 'Years Experience', label_bn: 'বছরের অভিজ্ঞতা' },
+    { icon: Clock, value: '24/7', label_en: 'Support Available', label_bn: 'সাপোর্ট উপলব্ধ' },
   ];
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative hero-gradient overflow-hidden">
-        {/* Background Pattern */}
         <div className="absolute inset-0 opacity-30">
           <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
             <defs>
@@ -85,44 +76,44 @@ const Home: React.FC = () => {
         </div>
 
         <div className="container mx-auto px-4 py-20 md:py-28 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6 animate-fade-in-up">
+          <motion.div
+            className="max-w-4xl mx-auto text-center"
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+          >
+            <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
               <span className="w-2 h-2 rounded-full bg-primary" />
               <span className={`text-sm font-medium text-primary ${language === 'bn' ? 'font-bangla' : ''}`}>
                 {t('Trusted Medical Directory', 'বিশ্বস্ত মেডিকেল ডিরেক্টরি')}
               </span>
-            </div>
+            </motion.div>
 
-            {/* Main Heading */}
-            <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in-up leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <motion.h1 variants={fadeInUp} className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
               <span className="text-foreground">{t('Find Your', 'আপনার')} </span>
               <span className="text-gradient">{t('Expert Doctor', 'বিশেষজ্ঞ ডাক্তার')}</span>
               <br />
               <span className="text-foreground">{t('Today', 'খুঁজুন আজই')}</span>
-            </h1>
+            </motion.h1>
 
-            {/* Subtitle */}
-            <p className={`text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto animate-fade-in-up leading-relaxed ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <motion.p variants={fadeInUp} className={`text-base sm:text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t(
                 'Connect with Bangladesh\'s finest medical specialists. Book appointments with experienced doctors across multiple specialties.',
                 'বাংলাদেশের সেরা চিকিৎসা বিশেষজ্ঞদের সাথে সংযুক্ত হন। বিভিন্ন বিশেষত্বে অভিজ্ঞ ডাক্তারদের সাথে অ্যাপয়েন্টমেন্ট বুক করুন।'
               )}
-            </p>
+            </motion.p>
 
-            {/* Search Bar */}
-            <div className="animate-fade-in-up">
+            <motion.div variants={fadeInUp}>
               <SearchBar
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
                 sortBy={sortBy}
                 onSortChange={setSortBy}
               />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
 
-        {/* Wave Divider */}
         <div className="absolute bottom-0 left-0 right-0 overflow-hidden leading-none">
           <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-16 md:h-24">
             <path
@@ -136,30 +127,42 @@ const Home: React.FC = () => {
       {/* Stats Section */}
       <section className="py-16 md:py-20 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
+          <motion.div
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={staggerContainer}
+          >
             {stats.map((stat, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="text-center p-6 lg:p-8 rounded-2xl bg-card border border-border hover:shadow-lg transition-all duration-300"
+                variants={fadeInUp}
+                className="text-center p-4 sm:p-6 lg:p-8 rounded-2xl bg-card border border-border hover:shadow-lg transition-all duration-300"
               >
-                <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-primary/10 text-primary mb-4">
-                  <stat.icon className="w-7 h-7" />
+                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-primary/10 text-primary mb-3 sm:mb-4">
+                  <stat.icon className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
-                <p className="text-3xl md:text-4xl font-bold text-foreground">{stat.value}</p>
-                <p className={`text-sm text-muted-foreground mt-1 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">{stat.value}</p>
+                <p className={`text-xs sm:text-sm text-muted-foreground mt-1 ${language === 'bn' ? 'font-bangla' : ''}`}>
                   {language === 'en' ? stat.label_en : stat.label_bn}
                 </p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Doctors Grid */}
       <section className="py-16 md:py-24 bg-background" id="doctors">
         <div className="container mx-auto px-4">
-          {/* Section Header */}
-          <div className="text-center mb-12">
+          <motion.div
+            className="text-center mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={fadeInUp}
+          >
             <span className={`text-sm font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
               {t('Our Specialists', 'আমাদের বিশেষজ্ঞগণ')}
             </span>
@@ -172,21 +175,22 @@ const Home: React.FC = () => {
                 'আপনার স্বাস্থ্যের জন্য নিবেদিত আমাদের উচ্চ যোগ্যতাসম্পন্ন চিকিৎসা পেশাদারদের দল থেকে বেছে নিন।'
               )}
             </p>
-          </div>
+          </motion.div>
 
-          {/* Doctors Grid */}
           {filteredDoctors.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
-              {filteredDoctors.map((doctor, index) => (
-                <div
-                  key={doctor.id}
-                  className="animate-fade-in-up"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
+            <motion.div
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-80px' }}
+              variants={staggerContainer}
+            >
+              {filteredDoctors.map((doctor) => (
+                <motion.div key={doctor.id} variants={fadeInUp}>
                   <DoctorCard doctor={doctor} />
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           ) : (
             <div className="text-center py-16">
               <p className={`text-lg text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
@@ -200,23 +204,30 @@ const Home: React.FC = () => {
       {/* CTA Section */}
       <section className="py-20 md:py-28 hero-gradient">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className={`text-3xl md:text-4xl font-bold mb-5 ${language === 'bn' ? 'font-bangla' : ''}`}>
+          <motion.div
+            className="max-w-3xl mx-auto text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={staggerContainer}
+          >
+            <motion.h2 variants={fadeInUp} className={`text-3xl md:text-4xl font-bold mb-5 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t('Ready to Book Your Appointment?', 'আপনার অ্যাপয়েন্টমেন্ট বুক করতে প্রস্তুত?')}
-            </h2>
-            <p className={`text-lg text-muted-foreground mb-8 ${language === 'bn' ? 'font-bangla' : ''}`}>
+            </motion.h2>
+            <motion.p variants={fadeInUp} className={`text-lg text-muted-foreground mb-8 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t(
                 'Select a doctor from our directory and schedule your consultation today.',
                 'আমাদের ডিরেক্টরি থেকে একজন ডাক্তার নির্বাচন করুন এবং আজই আপনার পরামর্শ সিডিউল করুন।'
               )}
-            </p>
-            <a 
+            </motion.p>
+            <motion.a
+              variants={fadeInUp}
               href="#doctors"
               className={`btn-primary-gradient px-10 py-4 rounded-full text-lg font-medium inline-block ${language === 'bn' ? 'font-bangla' : ''}`}
             >
               {t('Browse All Doctors', 'সব ডাক্তার ব্রাউজ করুন')}
-            </a>
-          </div>
+            </motion.a>
+          </motion.div>
         </div>
       </section>
     </div>
