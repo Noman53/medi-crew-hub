@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ChevronLeft, ChevronRight, Calendar, Clock, User, Check } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface BookingWizardProps {
   doctorName: string;
@@ -18,7 +19,6 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, closedDay }) 
     problem: '',
   });
 
-  // Calendar state
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const monthNames = language === 'en'
@@ -44,7 +44,6 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, closedDay }) 
     { num: 3, label_en: 'Details', label_bn: 'বিবরণ', icon: User },
   ];
 
-  // Calendar helpers
   const getDaysInMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
@@ -57,13 +56,8 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, closedDay }) 
     const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
-    // Check if past
     if (date < today) return true;
-    
-    // Check if closed day (Friday = 5)
     if (closedDay.toLowerCase().includes('friday') && date.getDay() === 5) return true;
-    
     return false;
   };
 
@@ -91,12 +85,10 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, closedDay }) 
   };
 
   const handleSubmit = () => {
-    // Here you would integrate with backend/API
     alert(t(
       `Booking request sent! ${doctorName}'s team will contact you soon.`,
       `বুকিং অনুরোধ পাঠানো হয়েছে! ${doctorName} এর টিম শীঘ্রই আপনার সাথে যোগাযোগ করবে।`
     ));
-    // Reset form
     setCurrentStep(1);
     setSelectedDate(null);
     setSelectedTime(null);
@@ -117,7 +109,7 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, closedDay }) 
         {steps.map((step, index) => (
           <React.Fragment key={step.num}>
             <div className="flex flex-col items-center gap-2">
-              <div
+              <motion.div
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
                   currentStep > step.num
                     ? 'bg-primary text-primary-foreground'
@@ -125,9 +117,10 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, closedDay }) 
                     ? 'bg-primary text-primary-foreground ring-4 ring-primary/20'
                     : 'bg-muted text-muted-foreground'
                 }`}
+                animate={{ scale: currentStep === step.num ? 1.1 : 1 }}
               >
                 {currentStep > step.num ? <Check className="w-5 h-5" /> : step.num}
-              </div>
+              </motion.div>
               <span className={`text-xs font-medium ${currentStep >= step.num ? 'text-foreground' : 'text-muted-foreground'} ${language === 'bn' ? 'font-bangla' : ''}`}>
                 {language === 'en' ? step.label_en : step.label_bn}
               </span>
@@ -141,169 +134,190 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, closedDay }) 
 
       {/* Step content */}
       <div className="card-elevated p-6 min-h-[400px]">
-        {/* Step 1: Date Selection */}
-        {currentStep === 1 && (
-          <div className="animate-fade-in">
-            {/* Month navigation */}
-            <div className="flex items-center justify-between mb-4">
-              <button
-                onClick={handlePrevMonth}
-                className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                <span className={language === 'bn' ? 'font-bangla' : ''}>{t('previous month', 'আগের মাস')}</span>
-              </button>
-              <h3 className={`text-lg font-bold ${language === 'bn' ? 'font-bangla' : ''}`}>
-                {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
-              </h3>
-              <button
-                onClick={handleNextMonth}
-                className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <span className={language === 'bn' ? 'font-bangla' : ''}>{t('next month', 'পরের মাস')}</span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
+        <AnimatePresence mode="wait">
+          {/* Step 1: Date Selection */}
+          {currentStep === 1 && (
+            <motion.div
+              key="step1"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              {/* Month navigation - ARROWS ONLY */}
+              <div className="flex items-center justify-between mb-6">
+                <button
+                  onClick={handlePrevMonth}
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
+                  aria-label={t('Previous month', 'আগের মাস')}
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <h3 className={`text-lg font-bold ${language === 'bn' ? 'font-bangla' : ''}`}>
+                  {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
+                </h3>
+                <button
+                  onClick={handleNextMonth}
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
+                  aria-label={t('Next month', 'পরের মাস')}
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
 
-            {/* Day headers */}
-            <div className="grid grid-cols-7 gap-1 mb-2">
-              {dayNames.map((day) => (
-                <div key={day} className={`text-center text-xs font-medium text-muted-foreground py-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
-                  {day}
-                </div>
-              ))}
-            </div>
+              {/* Day headers */}
+              <div className="grid grid-cols-7 gap-1 mb-2">
+                {dayNames.map((day) => (
+                  <div key={day} className={`text-center text-xs font-medium text-muted-foreground py-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    {day}
+                  </div>
+                ))}
+              </div>
 
-            {/* Calendar grid */}
-            <div className="grid grid-cols-7 gap-1">
-              {/* Empty cells */}
-              {Array.from({ length: getFirstDayOfMonth(currentMonth) }).map((_, i) => (
-                <div key={`empty-${i}`} className="aspect-square" />
-              ))}
-              
-              {/* Days */}
-              {Array.from({ length: getDaysInMonth(currentMonth) }).map((_, i) => {
-                const day = i + 1;
-                const disabled = isDateDisabled(day);
-                const selected = isSameDay(day);
-                const isFriday = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day).getDay() === 5;
+              {/* Calendar grid */}
+              <div className="grid grid-cols-7 gap-1">
+                {Array.from({ length: getFirstDayOfMonth(currentMonth) }).map((_, i) => (
+                  <div key={`empty-${i}`} className="aspect-square" />
+                ))}
+                {Array.from({ length: getDaysInMonth(currentMonth) }).map((_, i) => {
+                  const day = i + 1;
+                  const disabled = isDateDisabled(day);
+                  const selected = isSameDay(day);
+                  const isFriday = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day).getDay() === 5;
 
-                return (
-                  <button
-                    key={day}
-                    onClick={() => handleDateSelect(day)}
-                    disabled={disabled}
-                    className={`aspect-square rounded-lg flex items-center justify-center text-sm font-medium transition-all duration-200
-                      ${selected ? 'bg-primary text-primary-foreground scale-105' : ''}
-                      ${isFriday && !selected ? 'text-destructive/50' : ''}
-                      ${disabled && !isFriday ? 'text-muted-foreground/40' : ''}
-                      ${!disabled && !selected ? 'hover:bg-primary/10 text-foreground cursor-pointer' : ''}
-                      ${disabled ? 'cursor-not-allowed' : ''}
+                  return (
+                    <button
+                      key={day}
+                      onClick={() => handleDateSelect(day)}
+                      disabled={disabled}
+                      className={`aspect-square rounded-lg flex items-center justify-center text-sm font-medium transition-all duration-200
+                        ${selected ? 'bg-primary text-primary-foreground scale-105' : ''}
+                        ${isFriday && !selected ? 'text-destructive/50' : ''}
+                        ${disabled && !isFriday ? 'text-muted-foreground/40' : ''}
+                        ${!disabled && !selected ? 'hover:bg-primary/10 text-foreground cursor-pointer' : ''}
+                        ${disabled ? 'cursor-not-allowed' : ''}
+                      `}
+                    >
+                      {day}
+                    </button>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Step 2: Time Selection */}
+          {currentStep === 2 && (
+            <motion.div
+              key="step2"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-4"
+            >
+              <div className="text-center mb-6">
+                <p className={`text-sm text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
+                  {t('Selected Date:', 'নির্বাচিত তারিখ:')}
+                </p>
+                <p className={`text-lg font-bold ${language === 'bn' ? 'font-bangla' : ''}`}>
+                  {selectedDate?.toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </p>
+              </div>
+
+              <p className={`text-sm text-muted-foreground mb-4 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                {t('Choose a time slot:', 'একটি সময় বেছে নিন:')}
+              </p>
+
+              <div className="grid grid-cols-2 gap-3">
+                {timeSlots.map((slot) => (
+                  <motion.button
+                    key={slot.value}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setSelectedTime(slot.value)}
+                    className={`p-4 rounded-xl border-2 font-medium transition-all duration-200
+                      ${selectedTime === slot.value
+                        ? 'border-primary bg-primary/10 text-primary'
+                        : 'border-border hover:border-primary/50 text-foreground'
+                      }
                     `}
                   >
-                    {day}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
+                    {language === 'en' ? slot.label_en : slot.label_bn}
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+          )}
 
-        {/* Step 2: Time Selection */}
-        {currentStep === 2 && (
-          <div className="animate-fade-in space-y-4">
-            <div className="text-center mb-6">
-              <p className={`text-sm text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
-                {t('Selected Date:', 'নির্বাচিত তারিখ:')}
-              </p>
-              <p className={`text-lg font-bold ${language === 'bn' ? 'font-bangla' : ''}`}>
-                {selectedDate?.toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', { 
-                  weekday: 'long', 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}
-              </p>
-            </div>
-
-            <p className={`text-sm text-muted-foreground mb-4 ${language === 'bn' ? 'font-bangla' : ''}`}>
-              {t('Choose a time slot:', 'একটি সময় বেছে নিন:')}
-            </p>
-
-            <div className="grid grid-cols-2 gap-3">
-              {timeSlots.map((slot) => (
-                <button
-                  key={slot.value}
-                  onClick={() => setSelectedTime(slot.value)}
-                  className={`p-4 rounded-xl border-2 font-medium transition-all duration-200
-                    ${selectedTime === slot.value
-                      ? 'border-primary bg-primary/10 text-primary'
-                      : 'border-border hover:border-primary/50 text-foreground'
-                    }
-                  `}
-                >
-                  {language === 'en' ? slot.label_en : slot.label_bn}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Step 3: Contact Details */}
-        {currentStep === 3 && (
-          <div className="animate-fade-in space-y-4">
-            <div className="text-center mb-6">
-              <p className={`text-sm text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
-                {selectedDate?.toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', { 
-                  weekday: 'long', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })} • {timeSlots.find(s => s.value === selectedTime)?.[language === 'en' ? 'label_en' : 'label_bn']}
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
-                  {t('Full Name', 'পূর্ণ নাম')} <span className="text-destructive">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder={t('Enter your name', 'আপনার নাম লিখুন')}
-                  className={`w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all ${language === 'bn' ? 'font-bangla' : ''}`}
-                />
+          {/* Step 3: Contact Details */}
+          {currentStep === 3 && (
+            <motion.div
+              key="step3"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-4"
+            >
+              <div className="text-center mb-6">
+                <p className={`text-sm text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
+                  {selectedDate?.toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
+                    weekday: 'long',
+                    month: 'long',
+                    day: 'numeric',
+                  })} • {timeSlots.find(s => s.value === selectedTime)?.[language === 'en' ? 'label_en' : 'label_bn']}
+                </p>
               </div>
 
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
-                  {t('Phone Number', 'ফোন নম্বর')} <span className="text-destructive">*</span>
-                </label>
-                <input
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder={t('01XXX-XXXXXX', '০১XXX-XXXXXX')}
-                  className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                />
-              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    {t('Full Name', 'পূর্ণ নাম')} <span className="text-destructive">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder={t('Enter your name', 'আপনার নাম লিখুন')}
+                    className={`w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all ${language === 'bn' ? 'font-bangla' : ''}`}
+                  />
+                </div>
 
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
-                  {t('Describe your problem (optional)', 'আপনার সমস্যা বর্ণনা করুন (ঐচ্ছিক)')}
-                </label>
-                <textarea
-                  value={formData.problem}
-                  onChange={(e) => setFormData({ ...formData, problem: e.target.value })}
-                  placeholder={t('Brief description of your symptoms or reason for visit...', 'আপনার উপসর্গ বা পরিদর্শনের কারণের সংক্ষিপ্ত বিবরণ...')}
-                  rows={3}
-                  className={`w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none ${language === 'bn' ? 'font-bangla' : ''}`}
-                />
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    {t('Phone Number', 'ফোন নম্বর')} <span className="text-destructive">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder={t('01XXX-XXXXXX', '০১XXX-XXXXXX')}
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    {t('Describe your problem (optional)', 'আপনার সমস্যা বর্ণনা করুন (ঐচ্ছিক)')}
+                  </label>
+                  <textarea
+                    value={formData.problem}
+                    onChange={(e) => setFormData({ ...formData, problem: e.target.value })}
+                    placeholder={t('Brief description...', 'সংক্ষিপ্ত বিবরণ...')}
+                    rows={3}
+                    className={`w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none ${language === 'bn' ? 'font-bangla' : ''}`}
+                  />
+                </div>
               </div>
-            </div>
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Navigation buttons */}
