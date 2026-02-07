@@ -3,7 +3,7 @@ import { doctors } from '@/data/doctors';
 import { useLanguage } from '@/contexts/LanguageContext';
 import DoctorCard from '@/components/DoctorCard';
 import SearchBar from '@/components/SearchBar';
-import { Stethoscope, Users, Award, Clock } from 'lucide-react';
+import { Stethoscope, Users, Award, Clock, Heart, Shield, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const fadeInUp = {
@@ -60,10 +60,35 @@ const Home: React.FC = () => {
     { icon: Clock, value: '24/7', label_en: 'Support Available', label_bn: 'সাপোর্ট উপলব্ধ' },
   ];
 
+  const features = [
+    {
+      icon: Heart,
+      title_en: 'Expert Care',
+      title_bn: 'বিশেষজ্ঞ যত্ন',
+      desc_en: 'Highly qualified doctors with years of experience',
+      desc_bn: 'বছরের অভিজ্ঞতা সহ উচ্চ যোগ্যতাসম্পন্ন ডাক্তার',
+    },
+    {
+      icon: Shield,
+      title_en: 'Trusted Service',
+      title_bn: 'বিশ্বস্ত সেবা',
+      desc_en: 'Your health and privacy are our top priority',
+      desc_bn: 'আপনার স্বাস্থ্য এবং গোপনীয়তা আমাদের শীর্ষ অগ্রাধিকার',
+    },
+    {
+      icon: Star,
+      title_en: 'Easy Booking',
+      title_bn: 'সহজ বুকিং',
+      desc_en: 'Quick and simple appointment scheduling',
+      desc_bn: 'দ্রুত এবং সহজ অ্যাপয়েন্টমেন্ট শিডিউলিং',
+    },
+  ];
+
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative hero-gradient overflow-hidden">
+      {/* Hero Section - Enhanced Modern Design */}
+      <section className="relative hero-gradient overflow-hidden min-h-[70vh] md:min-h-[80vh] flex items-center">
+        {/* Background Pattern */}
         <div className="absolute inset-0 opacity-30">
           <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
             <defs>
@@ -75,6 +100,10 @@ const Home: React.FC = () => {
           </svg>
         </div>
 
+        {/* Decorative Blobs */}
+        <div className="absolute top-20 left-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-accent/10 rounded-full blur-3xl" />
+
         <div className="container mx-auto px-4 py-20 md:py-28 relative z-10">
           <motion.div
             className="max-w-4xl mx-auto text-center"
@@ -83,8 +112,8 @@ const Home: React.FC = () => {
             variants={staggerContainer}
           >
             <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-              <span className="w-2 h-2 rounded-full bg-primary" />
-              <span className={`text-sm font-medium text-primary ${language === 'bn' ? 'font-bangla' : ''}`}>
+              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+              <span className={`text-xs sm:text-sm font-medium text-primary ${language === 'bn' ? 'font-bangla' : ''}`}>
                 {t('Trusted Medical Directory', 'বিশ্বস্ত মেডিকেল ডিরেক্টরি')}
               </span>
             </motion.div>
@@ -96,7 +125,7 @@ const Home: React.FC = () => {
               <span className="text-foreground">{t('Today', 'খুঁজুন আজই')}</span>
             </motion.h1>
 
-            <motion.p variants={fadeInUp} className={`text-base sm:text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <motion.p variants={fadeInUp} className={`text-sm sm:text-base md:text-lg text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t(
                 'Connect with Bangladesh\'s finest medical specialists. Book appointments with experienced doctors across multiple specialties.',
                 'বাংলাদেশের সেরা চিকিৎসা বিশেষজ্ঞদের সাথে সংযুক্ত হন। বিভিন্ন বিশেষত্বে অভিজ্ঞ ডাক্তারদের সাথে অ্যাপয়েন্টমেন্ট বুক করুন।'
@@ -115,7 +144,7 @@ const Home: React.FC = () => {
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 overflow-hidden leading-none">
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-16 md:h-24">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20">
             <path
               d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.11,140.83,94.17,208.18,70.28,287.43,41.73,321.39,56.44,321.39,56.44Z"
               className="fill-background"
@@ -124,8 +153,41 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* Features Section - NEW */}
+      <section className="py-12 md:py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={staggerContainer}
+          >
+            {features.map((feature, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="flex items-start gap-4 p-5 sm:p-6 rounded-2xl bg-card border border-border hover:shadow-lg hover:border-primary/20 transition-all duration-300"
+              >
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <feature.icon className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className={`font-bold text-foreground text-base sm:text-lg ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    {language === 'en' ? feature.title_en : feature.title_bn}
+                  </h3>
+                  <p className={`text-sm text-muted-foreground mt-1 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    {language === 'en' ? feature.desc_en : feature.desc_bn}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* Stats Section */}
-      <section className="py-16 md:py-20 bg-background">
+      <section className="py-12 md:py-16 bg-secondary/30">
         <div className="container mx-auto px-4">
           <motion.div
             className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
@@ -163,13 +225,13 @@ const Home: React.FC = () => {
             viewport={{ once: true, margin: '-80px' }}
             variants={fadeInUp}
           >
-            <span className={`text-sm font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
+            <span className={`text-xs sm:text-sm font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
               {t('Our Specialists', 'আমাদের বিশেষজ্ঞগণ')}
             </span>
-            <h2 className={`text-3xl md:text-4xl font-bold mt-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold mt-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t('Meet Our Expert Doctors', 'আমাদের বিশেষজ্ঞ ডাক্তারদের সাথে পরিচিত হন')}
             </h2>
-            <p className={`text-muted-foreground mt-4 max-w-2xl mx-auto ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <p className={`text-muted-foreground mt-4 max-w-2xl mx-auto text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t(
                 'Choose from our team of highly qualified medical professionals dedicated to your health.',
                 'আপনার স্বাস্থ্যের জন্য নিবেদিত আমাদের উচ্চ যোগ্যতাসম্পন্ন চিকিৎসা পেশাদারদের দল থেকে বেছে নিন।'
@@ -202,7 +264,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 md:py-28 hero-gradient">
+      <section className="py-16 md:py-24 hero-gradient">
         <div className="container mx-auto px-4">
           <motion.div
             className="max-w-3xl mx-auto text-center"
@@ -211,10 +273,10 @@ const Home: React.FC = () => {
             viewport={{ once: true, margin: '-80px' }}
             variants={staggerContainer}
           >
-            <motion.h2 variants={fadeInUp} className={`text-3xl md:text-4xl font-bold mb-5 ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <motion.h2 variants={fadeInUp} className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-5 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t('Ready to Book Your Appointment?', 'আপনার অ্যাপয়েন্টমেন্ট বুক করতে প্রস্তুত?')}
             </motion.h2>
-            <motion.p variants={fadeInUp} className={`text-lg text-muted-foreground mb-8 ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <motion.p variants={fadeInUp} className={`text-base sm:text-lg text-muted-foreground mb-8 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t(
                 'Select a doctor from our directory and schedule your consultation today.',
                 'আমাদের ডিরেক্টরি থেকে একজন ডাক্তার নির্বাচন করুন এবং আজই আপনার পরামর্শ সিডিউল করুন।'
@@ -223,7 +285,7 @@ const Home: React.FC = () => {
             <motion.a
               variants={fadeInUp}
               href="#doctors"
-              className={`btn-primary-gradient px-10 py-4 rounded-full text-lg font-medium inline-block ${language === 'bn' ? 'font-bangla' : ''}`}
+              className={`btn-primary-gradient px-8 sm:px-10 py-3 sm:py-4 rounded-full text-base sm:text-lg font-medium inline-block ${language === 'bn' ? 'font-bangla' : ''}`}
             >
               {t('Browse All Doctors', 'সব ডাক্তার ব্রাউজ করুন')}
             </motion.a>
