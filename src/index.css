@@ -176,9 +176,13 @@
     @apply bg-white/90 backdrop-blur-md border border-white/40;
   }
 
-  /* Floating animation for doctor image */
-  .float-animation {
-    animation: float 6s ease-in-out infinite;
+  /* Glass morphic menu effect */
+  .glass-menu {
+    @apply bg-white/80 backdrop-blur-lg border border-white/30;
+  }
+
+  .glass-menu-item {
+    @apply bg-transparent hover:bg-white/50 backdrop-blur-sm;
   }
 
   /* Badge styles */
@@ -195,7 +199,7 @@
   }
 
   .doctor-card:hover {
-    @apply -translate-y-2;
+    @apply -translate-y-1;
     box-shadow: var(--shadow-xl);
   }
 
@@ -211,7 +215,7 @@
 
   /* Specialty icon container */
   .specialty-icon {
-    @apply flex items-center justify-center w-14 h-14 rounded-xl;
+    @apply flex items-center justify-center w-12 h-12 rounded-xl;
     background: linear-gradient(135deg, hsl(var(--teal-100)) 0%, hsl(var(--teal-50)) 100%);
   }
 
@@ -231,15 +235,6 @@
 
 @layer utilities {
   /* Animation keyframes */
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-  }
-
   @keyframes fade-in-up {
     from {
       opacity: 0;
@@ -279,11 +274,11 @@
   }
 
   .animate-fade-in-up {
-    animation: fade-in-up 0.6s ease-out forwards;
+    animation: fade-in-up 0.5s ease-out forwards;
   }
 
   .animate-slide-in-right {
-    animation: slide-in-right 0.6s ease-out forwards;
+    animation: slide-in-right 0.5s ease-out forwards;
   }
 
   .animate-pulse-glow {

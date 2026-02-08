@@ -82,17 +82,17 @@ const getSpecialtyIcon = (iconName: string) => {
 
 // Animation variants
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 20 },
   visible: (i: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay: i * 0.1, ease: [0, 0, 0.2, 1] as const },
+    transition: { duration: 0.5, delay: i * 0.1, ease: [0, 0, 0.2, 1] as const },
   }),
 };
 
 const staggerContainer = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } },
+  visible: { transition: { staggerChildren: 0.08 } },
 };
 
 const DoctorProfile: React.FC = () => {
@@ -115,21 +115,21 @@ const DoctorProfile: React.FC = () => {
       {/* Floating Contact Icons */}
       <FloatingContactIcons phone={doctor.contact.phone} whatsapp={doctor.contact.whatsapp} />
 
-      {/* Hero Section - Image RIGHT, content LEFT - FIXED LAYOUT */}
-      <section className="relative hero-gradient overflow-hidden min-h-[90vh] md:min-h-[85vh] flex items-center pt-20 md:pt-24">
-        <div className="container mx-auto px-4 py-8 md:py-12 lg:py-16">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+      {/* Hero Section - Clean layout with image on right, title card below image */}
+      <section className="relative hero-gradient overflow-hidden min-h-[85vh] md:min-h-[80vh] flex items-center pt-20 md:pt-24">
+        <div className="container mx-auto px-4 py-6 md:py-10">
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
             {/* Left Content */}
             <motion.div
-              className="space-y-5 md:space-y-6 order-2 lg:order-1 text-center lg:text-left"
+              className="space-y-4 md:space-y-5 order-2 lg:order-1 text-center lg:text-left"
               initial="hidden"
               animate="visible"
               variants={staggerContainer}
             >
               {/* Title Badge */}
-              <motion.div variants={fadeInUp} custom={0} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
+              <motion.div variants={fadeInUp} custom={0} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
                 <span className="w-2 h-2 rounded-full bg-primary" />
-                <span className={`text-xs sm:text-sm font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
+                <span className={`text-xs font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
                   {language === 'en' ? doctor.title_en : doctor.title_bn}
                 </span>
               </motion.div>
@@ -146,91 +146,85 @@ const DoctorProfile: React.FC = () => {
               </motion.h1>
 
               {/* Description */}
-              <motion.p variants={fadeInUp} custom={2} className={`text-sm sm:text-base md:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed ${language === 'bn' ? 'font-bangla' : ''}`}>
+              <motion.p variants={fadeInUp} custom={2} className={`text-sm sm:text-base text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed ${language === 'bn' ? 'font-bangla' : ''}`}>
                 {language === 'en' ? doctor.hero_description_en : doctor.hero_description_bn}
               </motion.p>
 
               {/* CTA Buttons */}
-              <motion.div variants={fadeInUp} custom={3} className="flex flex-wrap gap-3 sm:gap-4 pt-2 justify-center lg:justify-start">
+              <motion.div variants={fadeInUp} custom={3} className="flex flex-wrap gap-3 pt-2 justify-center lg:justify-start">
                 <a
                   href="#booking"
-                  className={`btn-primary-gradient px-5 sm:px-6 py-2.5 sm:py-3 rounded-full font-medium inline-flex items-center gap-2 text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}
+                  className={`btn-primary-gradient px-5 py-2.5 rounded-full font-medium inline-flex items-center gap-2 text-sm ${language === 'bn' ? 'font-bangla' : ''}`}
                 >
-                  <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <Calendar className="w-4 h-4" />
                   {t('Book Consultation', 'পরামর্শ বুক করুন')}
                 </a>
                 <a
                   href="#services"
-                  className={`px-5 sm:px-6 py-2.5 sm:py-3 rounded-full font-medium border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-2 text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}
+                  className={`px-5 py-2.5 rounded-full font-medium border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-2 text-sm ${language === 'bn' ? 'font-bangla' : ''}`}
                 >
                   {t('View Specialties', 'বিশেষত্ব দেখুন')}
                 </a>
               </motion.div>
 
               {/* Badges */}
-              <motion.div variants={fadeInUp} custom={4} className="flex flex-wrap gap-x-4 sm:gap-x-6 gap-y-2 pt-4 justify-center lg:justify-start">
+              <motion.div variants={fadeInUp} custom={4} className="flex flex-wrap gap-x-4 gap-y-2 pt-3 justify-center lg:justify-start">
                 {doctor.badges.map((badge, index) => (
                   <div key={index} className="flex items-center gap-2 text-muted-foreground">
-                    <Award className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-                    <span className="text-xs sm:text-sm font-medium">{badge.text}</span>
+                    <Award className="w-4 h-4 text-primary" />
+                    <span className="text-xs font-medium">{badge.text}</span>
                   </div>
                 ))}
               </motion.div>
             </motion.div>
 
-            {/* Right Content - Doctor Image (properly sized, NO animation) */}
+            {/* Right Content - Doctor Image with Title Card BELOW */}
             <motion.div
-              className="relative flex justify-center lg:justify-end order-1 lg:order-2"
-              initial={{ opacity: 0, scale: 0.9 }}
+              className="relative flex flex-col items-center lg:items-end order-1 lg:order-2"
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
             >
               {/* Decorative blur circle */}
-              <div className="absolute w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full bg-gradient-to-br from-primary/20 to-accent/10 blur-3xl -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+              <div className="absolute w-40 h-40 sm:w-52 sm:h-52 md:w-60 md:h-60 rounded-full bg-gradient-to-br from-primary/20 to-accent/10 blur-3xl -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
 
-              {/* Doctor Image Container - FIXED SIZE, NO FLOAT ANIMATION */}
-              <div className="relative">
-                {/* Main Image - constrained and perfect size */}
-                <div className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl bg-secondary">
-                  <img
-                    src={doctor.photo}
-                    alt={language === 'en' ? doctor.name_en : doctor.name_bn}
-                    className="w-full h-full object-cover object-top"
-                  />
-                </div>
-
-                {/* Info Card - Floating BELOW the image, not overlapping */}
-                <motion.div
-                  className="absolute -bottom-16 left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-auto sm:-bottom-4 sm:-right-4 md:-bottom-2 md:-right-8 lg:-right-12 glass rounded-xl p-3 sm:p-4 shadow-xl w-[200px] sm:w-[220px]"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.5 }}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="flex-1 min-w-0">
-                      <p className={`font-bold text-foreground text-sm leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
-                        {language === 'en' ? doctor.name_en : doctor.name_bn}
-                      </p>
-                      <p className={`text-xs text-primary mt-0.5 leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
-                        {language === 'en' ? doctor.title_en : doctor.title_bn}
-                      </p>
-                      <p className={`text-[10px] sm:text-xs text-muted-foreground mt-0.5 leading-tight line-clamp-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
-                        {language === 'en' ? doctor.institution_en : doctor.institution_bn}
-                      </p>
-                    </div>
-                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-                      <Stethoscope className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
-                    </div>
-                  </div>
-                </motion.div>
+              {/* Doctor Image - Clean circular with proper sizing */}
+              <div className="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl bg-secondary">
+                <img
+                  src={doctor.photo}
+                  alt={language === 'en' ? doctor.name_en : doctor.name_bn}
+                  className="w-full h-full object-cover object-top"
+                />
               </div>
+
+              {/* Info Card - Positioned BELOW the image, matching width */}
+              <motion.div
+                className="glass-menu rounded-xl p-3 shadow-lg mt-4 w-40 sm:w-48 md:w-56 lg:w-64"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.4 }}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                    <Stethoscope className="w-4 h-4 text-primary-foreground" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={`font-bold text-foreground text-sm leading-tight truncate ${language === 'bn' ? 'font-bangla' : ''}`}>
+                      {language === 'en' ? doctor.name_en : doctor.name_bn}
+                    </p>
+                    <p className={`text-xs text-primary leading-tight truncate ${language === 'bn' ? 'font-bangla' : ''}`}>
+                      {language === 'en' ? doctor.specialist_en : doctor.specialist_bn}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
 
         {/* Wave Divider */}
         <div className="absolute bottom-0 left-0 right-0 overflow-hidden leading-none">
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-10 md:h-16">
             <path
               d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.11,140.83,94.17,208.18,70.28,287.43,41.73,321.39,56.44,321.39,56.44Z"
               className="fill-background"
@@ -239,29 +233,29 @@ const DoctorProfile: React.FC = () => {
         </div>
       </section>
 
-      {/* Why Choose Section */}
-      <section className="py-16 md:py-24 bg-background">
+      {/* Why Choose Section - Reduced gap */}
+      <section className="py-10 md:py-14 bg-background">
         <div className="container mx-auto px-4">
           <motion.div
-            className="text-center mb-12"
+            className="text-center mb-8"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '-80px' }}
             variants={fadeInUp}
           >
-            <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <h2 className={`text-xl sm:text-2xl md:text-3xl font-bold ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t(`Why Choose Dr. ${doctor.name_en.split(' ').pop()}?`, `কেন ডাঃ ${doctor.name_bn.split(' ').pop()} বেছে নেবেন?`)}
             </h2>
-            <p className={`text-muted-foreground mt-4 max-w-2xl mx-auto text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <p className={`text-muted-foreground mt-3 max-w-2xl mx-auto text-sm ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t('Modern surgical care with advanced techniques and patient-centric approach.', 'উন্নত কৌশল এবং রোগী-কেন্দ্রিক পদ্ধতির সাথে আধুনিক অস্ত্রোপচার যত্ন।')}
             </p>
           </motion.div>
 
           <motion.div
-            className="grid md:grid-cols-3 gap-6 lg:gap-8"
+            className="grid md:grid-cols-3 gap-4 lg:gap-6"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '-80px' }}
             variants={staggerContainer}
           >
             {[
@@ -288,17 +282,17 @@ const DoctorProfile: React.FC = () => {
                 key={index}
                 variants={fadeInUp}
                 custom={index}
-                className="card-elevated p-6 lg:p-8 hover:shadow-xl transition-all duration-300 group"
+                className="card-elevated p-5 lg:p-6 hover:shadow-lg transition-all duration-300 group"
               >
-                <div className="specialty-icon mb-5 text-primary group-hover:scale-110 transition-transform duration-300">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7">
+                <div className="specialty-icon mb-4 text-primary group-hover:scale-110 transition-transform duration-300">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6">
                     <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
                   </svg>
                 </div>
-                <h3 className={`text-lg sm:text-xl font-bold mb-3 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                <h3 className={`text-base sm:text-lg font-bold mb-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
                   {language === 'en' ? item.title_en : item.title_bn}
                 </h3>
-                <p className={`text-muted-foreground leading-relaxed text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}>
+                <p className={`text-muted-foreground leading-relaxed text-sm ${language === 'bn' ? 'font-bangla' : ''}`}>
                   {language === 'en' ? item.desc_en : item.desc_bn}
                 </p>
               </motion.div>
@@ -307,103 +301,102 @@ const DoctorProfile: React.FC = () => {
         </div>
       </section>
 
-      {/* About Doctor Section */}
-      <section className="py-16 md:py-24 bg-secondary/30" id="about">
+      {/* About Doctor Section - Image on RIGHT, smaller, qualifications in 2 columns */}
+      <section className="py-10 md:py-14 bg-secondary/30" id="about">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Image */}
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
+            {/* Content - LEFT side */}
             <motion.div
-              className="relative"
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.6 }}
+              className="space-y-4 order-2 lg:order-1"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-80px' }}
+              variants={staggerContainer}
             >
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl max-w-sm mx-auto lg:max-w-md">
+              <motion.span variants={fadeInUp} className={`text-xs font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
+                {t('Meet Your Surgeon', 'আপনার সার্জনের সাথে পরিচিত হন')}
+              </motion.span>
+
+              <motion.h2 variants={fadeInUp} className={`text-xl sm:text-2xl md:text-3xl font-bold ${language === 'bn' ? 'font-bangla' : ''}`}>
+                {language === 'en' ? doctor.name_en : doctor.name_bn}
+              </motion.h2>
+
+              <motion.p variants={fadeInUp} className={`text-base text-primary font-medium ${language === 'bn' ? 'font-bangla' : ''}`}>
+                {language === 'en' ? doctor.title_en : doctor.title_bn}
+              </motion.p>
+
+              <motion.p variants={fadeInUp} className={`text-muted-foreground text-sm ${language === 'bn' ? 'font-bangla' : ''}`}>
+                {language === 'en' ? doctor.institution_en : doctor.institution_bn}
+              </motion.p>
+
+              <motion.p variants={fadeInUp} className={`text-muted-foreground leading-relaxed text-sm ${language === 'bn' ? 'font-bangla' : ''}`}>
+                {language === 'en' ? doctor.bio_en : doctor.bio_bn}
+              </motion.p>
+
+              {/* Qualifications - 2 column grid with checkmark circles */}
+              <motion.div variants={fadeInUp} className="pt-2">
+                <h3 className={`text-base font-bold mb-3 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                  {t('Qualifications & Degrees', 'যোগ্যতা ও ডিগ্রি')}
+                </h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {doctor.qualifications.map((qual, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <CheckCircle className="w-3 h-3 text-primary" />
+                      </div>
+                      <span className="text-foreground font-medium text-xs sm:text-sm">{qual}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+
+              <motion.a
+                variants={fadeInUp}
+                href="#locations"
+                className={`inline-flex items-center gap-2 btn-primary-gradient px-5 py-2.5 rounded-full font-medium text-sm ${language === 'bn' ? 'font-bangla' : ''}`}
+              >
+                {t(`Visit Chamber`, `চেম্বারে যান`)}
+              </motion.a>
+            </motion.div>
+
+            {/* Image - RIGHT side, smaller */}
+            <motion.div
+              className="relative flex justify-center lg:justify-end order-1 lg:order-2"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="w-48 h-56 sm:w-56 sm:h-64 md:w-64 md:h-72 rounded-2xl overflow-hidden shadow-xl">
                 <img
                   src={doctor.photo}
                   alt={language === 'en' ? doctor.name_en : doctor.name_bn}
                   className="w-full h-full object-cover object-top"
                 />
               </div>
-              <div className="absolute -bottom-4 -right-4 w-24 h-24 sm:w-32 sm:h-32 bg-primary/10 rounded-2xl -z-10" />
-            </motion.div>
-
-            {/* Content */}
-            <motion.div
-              className="space-y-5 sm:space-y-6"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-100px' }}
-              variants={staggerContainer}
-            >
-              <motion.span variants={fadeInUp} className={`text-xs sm:text-sm font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
-                {t('Meet Your Surgeon', 'আপনার সার্জনের সাথে পরিচিত হন')}
-              </motion.span>
-
-              <motion.h2 variants={fadeInUp} className={`text-2xl sm:text-3xl md:text-4xl font-bold ${language === 'bn' ? 'font-bangla' : ''}`}>
-                {language === 'en' ? doctor.name_en : doctor.name_bn}
-              </motion.h2>
-
-              <motion.p variants={fadeInUp} className={`text-base sm:text-lg text-primary font-medium ${language === 'bn' ? 'font-bangla' : ''}`}>
-                {language === 'en' ? doctor.title_en : doctor.title_bn}
-              </motion.p>
-
-              <motion.p variants={fadeInUp} className={`text-muted-foreground text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}>
-                {language === 'en' ? doctor.institution_en : doctor.institution_bn}
-              </motion.p>
-
-              <motion.p variants={fadeInUp} className={`text-muted-foreground leading-relaxed text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}>
-                <strong className="text-foreground">
-                  {language === 'en' ? doctor.name_en : doctor.name_bn}
-                </strong>{' '}
-                {language === 'en' ? doctor.bio_en : doctor.bio_bn}
-              </motion.p>
-
-              {/* Qualifications */}
-              <motion.div variants={fadeInUp} className="pt-2">
-                <h3 className={`text-base sm:text-lg font-bold mb-4 ${language === 'bn' ? 'font-bangla' : ''}`}>
-                  {t('Qualifications & Degrees', 'যোগ্যতা ও ডিগ্রি')}
-                </h3>
-                <ul className="space-y-3">
-                  {doctor.qualifications.map((qual, index) => (
-                    <li key={index} className="flex items-center gap-3">
-                      <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary flex-shrink-0" />
-                      <span className="text-foreground font-medium text-sm sm:text-base">{qual}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-
-              <motion.a
-                variants={fadeInUp}
-                href="#locations"
-                className={`inline-flex items-center gap-2 btn-primary-gradient px-5 sm:px-7 py-3 rounded-full font-medium text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}
-              >
-                {t(`Visit Chamber at ${doctor.chamber.name_en}`, `${doctor.chamber.name_bn}-এ চেম্বারে যান`)}
-              </motion.a>
+              <div className="absolute -bottom-3 -left-3 w-16 h-16 sm:w-20 sm:h-20 bg-primary/10 rounded-2xl -z-10" />
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Specialties Section */}
-      <section className="py-16 md:py-24 bg-background" id="services">
+      {/* Specialties Section - Reduced gap */}
+      <section className="py-10 md:py-14 bg-background" id="services">
         <div className="container mx-auto px-4">
           <motion.div
-            className="text-center mb-12"
+            className="text-center mb-8"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '-80px' }}
             variants={fadeInUp}
           >
-            <span className={`text-xs sm:text-sm font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
+            <span className={`text-xs font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
               {t('Expertise', 'দক্ষতা')}
             </span>
-            <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold mt-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <h2 className={`text-xl sm:text-2xl md:text-3xl font-bold mt-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t('Specialized Treatments', 'বিশেষ চিকিৎসা')}
             </h2>
-            <p className={`text-muted-foreground mt-4 max-w-2xl mx-auto text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <p className={`text-muted-foreground mt-3 max-w-2xl mx-auto text-sm ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t(
                 'Comprehensive surgical solutions for gastrointestinal and hepatobiliary conditions.',
                 'গ্যাস্ট্রোইনটেস্টাইনাল এবং হেপাটোবিলিয়ারি অবস্থার জন্য ব্যাপক অস্ত্রোপচার সমাধান।'
@@ -412,25 +405,25 @@ const DoctorProfile: React.FC = () => {
           </motion.div>
 
           <motion.div
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '-80px' }}
             variants={staggerContainer}
           >
             {doctor.specialties.map((specialty) => (
               <motion.div
                 key={specialty.id}
                 variants={fadeInUp}
-                className="card-elevated p-6 lg:p-8 hover:shadow-xl transition-all duration-300 group"
+                className="card-elevated p-5 lg:p-6 hover:shadow-lg transition-all duration-300 group"
               >
-                <div className="specialty-icon mb-5 text-primary group-hover:scale-110 transition-transform duration-300">
+                <div className="specialty-icon mb-4 text-primary group-hover:scale-110 transition-transform duration-300">
                   {getSpecialtyIcon(specialty.icon)}
                 </div>
-                <h3 className={`text-lg sm:text-xl font-bold mb-3 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                <h3 className={`text-base sm:text-lg font-bold mb-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
                   {language === 'en' ? specialty.name_en : specialty.name_bn}
                 </h3>
-                <p className={`text-muted-foreground leading-relaxed text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}>
+                <p className={`text-muted-foreground leading-relaxed text-sm ${language === 'bn' ? 'font-bangla' : ''}`}>
                   {language === 'en' ? specialty.description_en : specialty.description_bn}
                 </p>
               </motion.div>
@@ -439,80 +432,80 @@ const DoctorProfile: React.FC = () => {
         </div>
       </section>
 
-      {/* Chamber/Location Section with Google Map */}
-      <section className="py-16 md:py-24 bg-secondary/30" id="locations">
+      {/* Chamber/Location Section with Google Map - Reduced gap */}
+      <section className="py-10 md:py-14 bg-secondary/30" id="locations">
         <div className="container mx-auto px-4">
           <motion.div
-            className="text-center mb-12"
+            className="text-center mb-8"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '-80px' }}
             variants={fadeInUp}
           >
-            <span className={`text-xs sm:text-sm font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
+            <span className={`text-xs font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
               {t('Chamber', 'চেম্বার')}
             </span>
-            <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold mt-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <h2 className={`text-xl sm:text-2xl md:text-3xl font-bold mt-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t(`Visit Dr. ${doctor.name_en.split(' ').pop()}`, `ডাঃ ${doctor.name_bn.split(' ').pop()} কে দেখুন`)}
             </h2>
-            <p className={`text-muted-foreground mt-4 text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <p className={`text-muted-foreground mt-3 text-sm ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t(`Book your consultation at ${doctor.chamber.name_en}.`, `${doctor.chamber.name_bn}-এ আপনার পরামর্শ বুক করুন।`)}
             </p>
           </motion.div>
 
           <div className="max-w-4xl mx-auto">
             <motion.div
-              className="grid lg:grid-cols-2 gap-6"
+              className="grid lg:grid-cols-2 gap-4"
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={{ once: true, margin: '-80px' }}
               variants={staggerContainer}
             >
               {/* Chamber Info Card */}
-              <motion.div variants={fadeInUp} className="card-elevated p-6 sm:p-8 flex flex-col">
-                <h3 className={`text-lg sm:text-xl font-bold mb-6 ${language === 'bn' ? 'font-bangla' : ''}`}>
+              <motion.div variants={fadeInUp} className="card-elevated p-5 sm:p-6 flex flex-col">
+                <h3 className={`text-base sm:text-lg font-bold mb-4 ${language === 'bn' ? 'font-bangla' : ''}`}>
                   {language === 'en' ? doctor.chamber.name_en : doctor.chamber.name_bn}
                 </h3>
 
-                <div className="space-y-5 flex-1">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-5 h-5 text-primary" />
+                <div className="space-y-4 flex-1">
+                  <div className="flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-4 h-4 text-primary" />
                     </div>
                     <div>
-                      <p className={`font-semibold text-foreground text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}>
+                      <p className={`font-semibold text-foreground text-sm ${language === 'bn' ? 'font-bangla' : ''}`}>
                         {t('Address', 'ঠিকানা')}
                       </p>
-                      <p className={`text-xs sm:text-sm text-muted-foreground mt-1 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                      <p className={`text-xs text-muted-foreground mt-0.5 ${language === 'bn' ? 'font-bangla' : ''}`}>
                         {language === 'en' ? doctor.chamber.address_en : doctor.chamber.address_bn}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <Clock className="w-5 h-5 text-primary" />
+                  <div className="flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Clock className="w-4 h-4 text-primary" />
                     </div>
                     <div>
-                      <p className={`font-semibold text-foreground text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}>
+                      <p className={`font-semibold text-foreground text-sm ${language === 'bn' ? 'font-bangla' : ''}`}>
                         {t('Visiting Hour', 'পরিদর্শনের সময়')}
                       </p>
-                      <p className={`text-xs sm:text-sm text-muted-foreground mt-1 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                      <p className={`text-xs text-muted-foreground mt-0.5 ${language === 'bn' ? 'font-bangla' : ''}`}>
                         {language === 'en' ? doctor.chamber.visiting_hours_en : doctor.chamber.visiting_hours_bn}{' '}
                         ({language === 'en' ? doctor.chamber.closed_day_en : doctor.chamber.closed_day_bn})
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-5 h-5 text-primary" />
+                  <div className="flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Phone className="w-4 h-4 text-primary" />
                     </div>
                     <div>
-                      <p className={`font-semibold text-foreground text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}>
+                      <p className={`font-semibold text-foreground text-sm ${language === 'bn' ? 'font-bangla' : ''}`}>
                         {t('Appointment', 'অ্যাপয়েন্টমেন্ট')}
                       </p>
-                      <a href={`tel:${doctor.contact.phone}`} className="text-primary hover:underline font-medium text-xs sm:text-sm mt-1 block">
+                      <a href={`tel:${doctor.contact.phone}`} className="text-primary hover:underline font-medium text-xs mt-0.5 block">
                         {doctor.contact.phone}
                       </a>
                     </div>
@@ -523,19 +516,19 @@ const DoctorProfile: React.FC = () => {
                   href={doctor.chamber.map_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`mt-6 w-full btn-primary-gradient px-6 py-3 rounded-full font-medium inline-flex items-center justify-center gap-2 text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}
+                  className={`mt-5 w-full btn-primary-gradient px-5 py-2.5 rounded-full font-medium inline-flex items-center justify-center gap-2 text-sm ${language === 'bn' ? 'font-bangla' : ''}`}
                 >
-                  <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <ExternalLink className="w-4 h-4" />
                   {t('Get Directions', 'দিকনির্দেশনা পান')}
                 </a>
               </motion.div>
 
               {/* Google Map Embed */}
-              <motion.div variants={fadeInUp} className="card-elevated overflow-hidden min-h-[280px] sm:min-h-[300px] lg:min-h-0">
+              <motion.div variants={fadeInUp} className="card-elevated overflow-hidden min-h-[250px] lg:min-h-0">
                 <iframe
                   title={`${doctor.chamber.name_en} Location`}
                   src={`https://www.google.com/maps?q=${mapEmbedQuery}&output=embed`}
-                  className="w-full h-full min-h-[280px] sm:min-h-[300px] lg:min-h-[400px]"
+                  className="w-full h-full min-h-[250px] lg:min-h-[320px]"
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
@@ -547,30 +540,30 @@ const DoctorProfile: React.FC = () => {
         </div>
       </section>
 
-      {/* Booking Section - NO CALL/WHATSAPP BUTTONS */}
-      <section className="py-16 md:py-24 bg-background" id="booking">
+      {/* Booking Section - Reduced gap */}
+      <section className="py-10 md:py-14 bg-background" id="booking">
         <div className="container mx-auto px-4">
           <motion.div
-            className="text-center mb-12"
+            className="text-center mb-8"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '-80px' }}
             variants={fadeInUp}
           >
-            <span className={`text-xs sm:text-sm font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
+            <span className={`text-xs font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
               {t('Appointments', 'অ্যাপয়েন্টমেন্ট')}
             </span>
-            <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold mt-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <h2 className={`text-xl sm:text-2xl md:text-3xl font-bold mt-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t('Book Your Consultation', 'আপনার পরামর্শ বুক করুন')}
             </h2>
-            <p className={`text-muted-foreground mt-4 text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <p className={`text-muted-foreground mt-3 text-sm ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t('Simple 3-step process. Team will contact you to confirm.', 'সহজ ৩-ধাপ প্রক্রিয়া। টিম নিশ্চিত করতে আপনার সাথে যোগাযোগ করবে।')}
             </p>
           </motion.div>
 
           <BookingWizard
             doctorName={language === 'en' ? doctor.name_en : doctor.name_bn}
-            closedDay={doctor.chamber.closed_day_en}
+            bookingConfig={doctor.booking_config}
           />
         </div>
       </section>
