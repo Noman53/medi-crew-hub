@@ -24,6 +24,8 @@ export interface Doctor {
   hero_description_bn: string;
   hero_description_en: string;
   badges: Badge[];
+  // Dynamic booking configuration per doctor
+  booking_config: BookingConfig;
 }
 
 export interface Specialty {
@@ -57,6 +59,91 @@ export interface Badge {
   text: string;
   icon?: string;
 }
+
+// Dynamic booking configuration per doctor
+export interface BookingConfig {
+  // Days that are closed (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+  closed_days: number[];
+  // Time slots available for this doctor
+  time_slots: TimeSlot[];
+  // Custom booking form fields
+  form_fields: FormField[];
+}
+
+export interface TimeSlot {
+  value: string;
+  label_en: string;
+  label_bn: string;
+}
+
+export interface FormField {
+  id: string;
+  type: 'text' | 'tel' | 'email' | 'textarea' | 'number';
+  label_en: string;
+  label_bn: string;
+  placeholder_en: string;
+  placeholder_bn: string;
+  required: boolean;
+}
+
+// Default time slots (can be customized per doctor)
+export const defaultTimeSlots: TimeSlot[] = [
+  { value: '18:00', label_en: '6:00 PM', label_bn: 'সন্ধ্যা ৬:০০' },
+  { value: '18:30', label_en: '6:30 PM', label_bn: 'সন্ধ্যা ৬:৩০' },
+  { value: '19:00', label_en: '7:00 PM', label_bn: 'সন্ধ্যা ৭:০০' },
+  { value: '19:30', label_en: '7:30 PM', label_bn: 'সন্ধ্যা ৭:৩০' },
+  { value: '20:00', label_en: '8:00 PM', label_bn: 'রাত ৮:০০' },
+  { value: '20:30', label_en: '8:30 PM', label_bn: 'রাত ৮:৩০' },
+];
+
+// Default form fields for booking
+export const defaultFormFields: FormField[] = [
+  {
+    id: 'name',
+    type: 'text',
+    label_en: 'Full Name',
+    label_bn: 'পূর্ণ নাম',
+    placeholder_en: 'Enter your full name',
+    placeholder_bn: 'আপনার পূর্ণ নাম লিখুন',
+    required: true,
+  },
+  {
+    id: 'phone',
+    type: 'tel',
+    label_en: 'Phone Number',
+    label_bn: 'ফোন নম্বর',
+    placeholder_en: '01XXX-XXXXXX',
+    placeholder_bn: '০১XXX-XXXXXX',
+    required: true,
+  },
+  {
+    id: 'age',
+    type: 'number',
+    label_en: 'Age',
+    label_bn: 'বয়স',
+    placeholder_en: 'Your age',
+    placeholder_bn: 'আপনার বয়স',
+    required: false,
+  },
+  {
+    id: 'email',
+    type: 'email',
+    label_en: 'Email (Optional)',
+    label_bn: 'ইমেইল (ঐচ্ছিক)',
+    placeholder_en: 'your@email.com',
+    placeholder_bn: 'your@email.com',
+    required: false,
+  },
+  {
+    id: 'reason',
+    type: 'textarea',
+    label_en: 'Reason for Visit',
+    label_bn: 'পরিদর্শনের কারণ',
+    placeholder_en: 'Brief description of your concern...',
+    placeholder_bn: 'আপনার সমস্যার সংক্ষিপ্ত বিবরণ...',
+    required: false,
+  },
+];
 
 // Import doctor images
 import drMuhsinImg from '@/assets/doctors/dr-muhsin.jpg';
@@ -151,6 +238,11 @@ export const doctors: Doctor[] = [
       phone: "+8801711946412",
       whatsapp: "+8801711946412",
     },
+    booking_config: {
+      closed_days: [5], // Friday closed
+      time_slots: defaultTimeSlots,
+      form_fields: defaultFormFields,
+    },
   },
   {
     id: "2",
@@ -208,13 +300,27 @@ export const doctors: Doctor[] = [
       address_en: "House 6, Road 4, Dhanmondi, Dhaka - 1205",
       visiting_hours_bn: "বিকাল ৪টা থেকে রাত ৮টা",
       visiting_hours_en: "4pm to 8pm",
-      closed_day_bn: "শুক্রবার বন্ধ",
-      closed_day_en: "Closed: Friday",
+      closed_day_bn: "শনিবার বন্ধ",
+      closed_day_en: "Closed: Saturday",
       map_url: "https://www.google.com/maps/dir/?api=1&destination=Labaid+Cardiac+Hospital+Dhaka",
     },
     contact: {
       phone: "+8801712345678",
       whatsapp: "+8801712345678",
+    },
+    booking_config: {
+      closed_days: [6], // Saturday closed (different from Dr. Muhsin)
+      time_slots: [
+        { value: '16:00', label_en: '4:00 PM', label_bn: 'বিকাল ৪:০০' },
+        { value: '16:30', label_en: '4:30 PM', label_bn: 'বিকাল ৪:৩০' },
+        { value: '17:00', label_en: '5:00 PM', label_bn: 'বিকাল ৫:০০' },
+        { value: '17:30', label_en: '5:30 PM', label_bn: 'বিকাল ৫:৩০' },
+        { value: '18:00', label_en: '6:00 PM', label_bn: 'সন্ধ্যা ৬:০০' },
+        { value: '18:30', label_en: '6:30 PM', label_bn: 'সন্ধ্যা ৬:৩০' },
+        { value: '19:00', label_en: '7:00 PM', label_bn: 'সন্ধ্যা ৭:০০' },
+        { value: '19:30', label_en: '7:30 PM', label_bn: 'সন্ধ্যা ৭:৩০' },
+      ],
+      form_fields: defaultFormFields,
     },
   },
 ];
