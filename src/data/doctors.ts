@@ -1,30 +1,84 @@
-// Centralized Doctor CMS Data
-// Adding/removing doctors here automatically updates the entire application
+/**
+ * ============================================================================
+ * DOCTOR CMS DATA - CENTRALIZED CONFIGURATION
+ * ============================================================================
+ * 
+ * This file is the SINGLE SOURCE OF TRUTH for all doctor data.
+ * Adding/removing doctors here automatically updates the entire application:
+ * - Home page directory
+ * - Navigation dropdowns
+ * - Individual doctor profile pages
+ * - Booking calendars with custom off-days
+ * - Floating contact buttons
+ * 
+ * ============================================================================
+ * HOW TO ADD A NEW DOCTOR:
+ * ============================================================================
+ * 1. Import the doctor's photo at the bottom of the imports section
+ * 2. Copy an existing doctor object from the `doctors` array
+ * 3. Update all fields with the new doctor's information
+ * 4. The doctor will automatically appear everywhere in the app
+ * 
+ * ============================================================================
+ * HOW TO CUSTOMIZE PER-DOCTOR SETTINGS:
+ * ============================================================================
+ * 
+ * BOOKING OFF-DAYS (closed_days):
+ * - 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday
+ * - 4 = Thursday, 5 = Friday, 6 = Saturday
+ * - Example: [5] means Friday is closed
+ * - Example: [5, 6] means Friday and Saturday are closed
+ * 
+ * TIME SLOTS:
+ * - Define custom time slots per doctor in booking_config.time_slots
+ * - Each slot needs: value (24h format), label_en, label_bn
+ * 
+ * CHAMBER/LOCATION:
+ * - Each doctor has their own chamber info in the `chamber` object
+ * - Update name, address, visiting hours, closed days, and map URL
+ * 
+ * CONTACT INFO (Floating Button):
+ * - phone: Phone number for calls
+ * - whatsapp: WhatsApp number (with country code)
+ * - These appear in the floating contact icons on doctor profiles
+ * 
+ * ============================================================================
+ */
+
+// ============================================================================
+// TYPE DEFINITIONS
+// ============================================================================
 
 export interface Doctor {
   id: string;
-  slug: string;
-  name_bn: string;
-  name_en: string;
-  title_bn: string;
-  title_en: string;
-  institution_bn: string;
-  institution_en: string;
-  specialist_bn: string;
-  specialist_en: string;
-  photo: string;
-  bio_bn: string;
-  bio_en: string;
-  qualifications: string[];
-  specialties: Specialty[];
+  slug: string;                    // URL-friendly identifier (e.g., "dr-john-doe")
+  name_bn: string;                 // Name in Bengali
+  name_en: string;                 // Name in English
+  title_bn: string;                // Title/Position in Bengali
+  title_en: string;                // Title/Position in English
+  institution_bn: string;          // Institution in Bengali
+  institution_en: string;          // Institution in English
+  specialist_bn: string;           // Specialty in Bengali
+  specialist_en: string;           // Specialty in English
+  photo: string;                   // Photo path (import at bottom)
+  bio_bn: string;                  // Biography in Bengali
+  bio_en: string;                  // Biography in English
+  qualifications: string[];        // List of degrees/qualifications
+  specialties: Specialty[];        // List of specialties/services
+  
+  // ⚡ CHAMBER SETTINGS - Customize location per doctor
   chamber: Chamber;
+  
+  // ⚡ CONTACT INFO - Appears in floating contact icons
   contact: Contact;
+  
   hero_tagline_bn: string;
   hero_tagline_en: string;
   hero_description_bn: string;
   hero_description_en: string;
   badges: Badge[];
-  // Dynamic booking configuration per doctor
+  
+  // ⚡ BOOKING SETTINGS - Customize calendar/form per doctor
   booking_config: BookingConfig;
 }
 
@@ -34,25 +88,37 @@ export interface Specialty {
   name_en: string;
   description_bn: string;
   description_en: string;
-  icon: string;
+  icon: string;  // Icon name (see DoctorProfile.tsx for available icons)
 }
 
+/**
+ * CHAMBER CONFIGURATION
+ * ---------------------
+ * Each doctor can have a different chamber location.
+ * The map_url should be a Google Maps directions link.
+ */
 export interface Chamber {
-  name_bn: string;
-  name_en: string;
-  address_bn: string;
-  address_en: string;
-  visiting_hours_bn: string;
-  visiting_hours_en: string;
-  closed_day_bn: string;
-  closed_day_en: string;
-  map_url: string;
+  name_bn: string;                 // Hospital/Clinic name in Bengali
+  name_en: string;                 // Hospital/Clinic name in English
+  address_bn: string;              // Full address in Bengali
+  address_en: string;              // Full address in English
+  visiting_hours_bn: string;       // e.g., "সন্ধ্যা ৬টা থেকে রাত ৯টা"
+  visiting_hours_en: string;       // e.g., "6pm to 9pm"
+  closed_day_bn: string;           // e.g., "শুক্রবার বন্ধ"
+  closed_day_en: string;           // e.g., "Closed: Friday"
+  map_url: string;                 // Google Maps directions URL
 }
 
+/**
+ * CONTACT CONFIGURATION
+ * ---------------------
+ * These numbers appear in the floating contact icons on doctor profiles.
+ * Include country code for WhatsApp (e.g., +8801234567890)
+ */
 export interface Contact {
-  phone: string;
-  whatsapp: string;
-  email?: string;
+  phone: string;                   // Phone number for calls
+  whatsapp: string;                // WhatsApp number (with country code, no +)
+  email?: string;                  // Optional email address
 }
 
 export interface Badge {
@@ -60,20 +126,34 @@ export interface Badge {
   icon?: string;
 }
 
-// Dynamic booking configuration per doctor
+/**
+ * BOOKING CONFIGURATION
+ * ---------------------
+ * Customize the booking calendar and form for each doctor.
+ * 
+ * closed_days: Array of day numbers that are closed
+ *   - 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday
+ *   - 4 = Thursday, 5 = Friday, 6 = Saturday
+ *   - Example: [5] = Friday closed
+ *   - Example: [5, 6] = Friday and Saturday closed
+ *   - Example: [0, 6] = Sunday and Saturday closed
+ * 
+ * time_slots: Available appointment times
+ *   - Use 24-hour format for value (e.g., "18:00" for 6 PM)
+ * 
+ * form_fields: Fields shown in the booking form
+ *   - Use defaultFormFields or customize per doctor
+ */
 export interface BookingConfig {
-  // Days that are closed (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-  closed_days: number[];
-  // Time slots available for this doctor
-  time_slots: TimeSlot[];
-  // Custom booking form fields
-  form_fields: FormField[];
+  closed_days: number[];           // Days calendar should disable (0-6)
+  time_slots: TimeSlot[];          // Available appointment times
+  form_fields: FormField[];        // Booking form fields
 }
 
 export interface TimeSlot {
-  value: string;
-  label_en: string;
-  label_bn: string;
+  value: string;                   // 24h format: "18:00"
+  label_en: string;                // Display: "6:00 PM"
+  label_bn: string;                // Display: "সন্ধ্যা ৬:০০"
 }
 
 export interface FormField {
@@ -86,7 +166,15 @@ export interface FormField {
   required: boolean;
 }
 
-// Default time slots (can be customized per doctor)
+// ============================================================================
+// DEFAULT CONFIGURATIONS (Use these as templates)
+// ============================================================================
+
+/**
+ * DEFAULT TIME SLOTS
+ * Use this for evening appointments (6 PM - 8:30 PM)
+ * Or create custom time slots for each doctor
+ */
 export const defaultTimeSlots: TimeSlot[] = [
   { value: '18:00', label_en: '6:00 PM', label_bn: 'সন্ধ্যা ৬:০০' },
   { value: '18:30', label_en: '6:30 PM', label_bn: 'সন্ধ্যা ৬:৩০' },
@@ -96,7 +184,25 @@ export const defaultTimeSlots: TimeSlot[] = [
   { value: '20:30', label_en: '8:30 PM', label_bn: 'রাত ৮:৩০' },
 ];
 
-// Default form fields for booking
+/**
+ * AFTERNOON TIME SLOTS EXAMPLE
+ * Use this for afternoon appointments (4 PM - 7:30 PM)
+ */
+export const afternoonTimeSlots: TimeSlot[] = [
+  { value: '16:00', label_en: '4:00 PM', label_bn: 'বিকাল ৪:০০' },
+  { value: '16:30', label_en: '4:30 PM', label_bn: 'বিকাল ৪:৩০' },
+  { value: '17:00', label_en: '5:00 PM', label_bn: 'বিকাল ৫:০০' },
+  { value: '17:30', label_en: '5:30 PM', label_bn: 'বিকাল ৫:৩০' },
+  { value: '18:00', label_en: '6:00 PM', label_bn: 'সন্ধ্যা ৬:০০' },
+  { value: '18:30', label_en: '6:30 PM', label_bn: 'সন্ধ্যা ৬:৩০' },
+  { value: '19:00', label_en: '7:00 PM', label_bn: 'সন্ধ্যা ৭:০০' },
+  { value: '19:30', label_en: '7:30 PM', label_bn: 'সন্ধ্যা ৭:৩০' },
+];
+
+/**
+ * DEFAULT FORM FIELDS
+ * Standard booking form with name, phone, age, email, reason
+ */
 export const defaultFormFields: FormField[] = [
   {
     id: 'name',
@@ -145,13 +251,32 @@ export const defaultFormFields: FormField[] = [
   },
 ];
 
-// Import doctor images
+// ============================================================================
+// DOCTOR PHOTOS - Import all doctor images here
+// ============================================================================
 import drMuhsinImg from '@/assets/doctors/dr-muhsin.jpg';
+// TODO: Add more doctor photos below:
+// import drFatimaImg from '@/assets/doctors/dr-fatima.jpg';
+// import drKarimImg from '@/assets/doctors/dr-karim.jpg';
+
+// ============================================================================
+// DOCTORS DATA - Add/Edit/Remove doctors here
+// ============================================================================
 
 export const doctors: Doctor[] = [
+  /**
+   * ========================================
+   * DOCTOR 1: Dr. Syed Md. Muhsin
+   * ========================================
+   * Specialty: General, Laparoscopic & Hepatobiliary Surgeon
+   * Chamber: Surgiscope Hospital, Chattogram
+   * Off Day: Friday (5)
+   */
   {
     id: "1",
-    slug: "dr-syed-md-muhsin",
+    slug: "dr-syed-md-muhsin",  // URL: /doctor/dr-syed-md-muhsin
+    
+    // Basic Information
     name_bn: "ডা. সৈয়দ মোঃ মুহসিন",
     name_en: "Dr. Syed Md. Muhsin",
     title_bn: "সার্জারি বিভাগের সহযোগী অধ্যাপক",
@@ -160,19 +285,31 @@ export const doctors: Doctor[] = [
     institution_en: "Chittagong Medical College & Hospital",
     specialist_bn: "জেনারেল, ল্যাপারোস্কপিক ও হেপাটোবিলিয়ারি সার্জন",
     specialist_en: "General, Laparoscopic & Hepatobiliary Surgeon",
+    
+    // Photo - Import at the top and reference here
     photo: drMuhsinImg,
+    
+    // Biography
     bio_bn: "ডা. সৈয়দ মোঃ মুহসিন চট্টগ্রামের একজন দক্ষ জেনারেল, ল্যাপারোস্কপিক ও হেপাটোবিলিয়ারি সার্জন। তিনি পিত্তথলির রোগ, লিভার টিউমার, পিত্তনালীর সমস্যা, অগ্ন্যাশয়ের রোগ এবং হার্নিয়া মেরামত ও এপেন্ডেক্টমির মতো রুটিন পদ্ধতিতে বিশেষজ্ঞ।",
     bio_en: "Dr. Syed Md. Muhsin is a highly skilled General, Laparoscopic, and Hepatobiliary surgeon in Chattogram. He specializes in gallbladder diseases, liver tumors, bile duct disorders, pancreatic diseases, and routine procedures like hernia repair and appendectomies.",
+    
+    // Qualifications (shown with checkmarks)
     qualifications: ["MBBS, MCPS, MS", "FCPS (Hepatobiliary)", "FRCS (Hon.), FACS", "FMAS Fellowship"],
+    
+    // Hero Section Content
     hero_tagline_bn: "লিভার ও পেটের স্বাস্থ্যের জন্য বিশেষজ্ঞ যত্ন",
     hero_tagline_en: "Expert Care for Liver & Abdominal Health",
     hero_description_bn: "ডা. সৈয়দ মোঃ মুহসিন জেনারেল, ল্যাপারোস্কপিক এবং হেপাটোবিলিয়ারি সার্জারিতে বিশেষ যত্ন প্রদান করেন। পিত্তথলি, লিভার এবং অগ্ন্যাশয়ের জটিল অবস্থার নিখুঁত চিকিৎসা।",
     hero_description_en: "Dr. Syed Md. Muhsin provides specialized care in General, Laparoscopic, and Hepatobiliary surgery. Treating complex conditions of the gallbladder, liver, and pancreas with precision.",
+    
+    // Badges shown in hero
     badges: [
       { text: "FRCS (Hon.)" },
       { text: "FACS (Hon.)" },
       { text: "Hepatobiliary Specialist" },
     ],
+    
+    // Specialties/Services
     specialties: [
       {
         id: "gallbladder",
@@ -223,6 +360,9 @@ export const doctors: Doctor[] = [
         icon: "appendix",
       },
     ],
+    
+    // ⚡ CHAMBER SETTINGS
+    // Customize the hospital/clinic location for this doctor
     chamber: {
       name_bn: "সার্জিস্কোপ হাসপাতাল, চট্টগ্রাম",
       name_en: "Surgiscope Hospital, Chattogram",
@@ -232,21 +372,43 @@ export const doctors: Doctor[] = [
       visiting_hours_en: "6pm to 9pm",
       closed_day_bn: "শুক্রবার বন্ধ",
       closed_day_en: "Closed: Friday",
+      // Google Maps directions link - Update with actual location
       map_url: "https://www.google.com/maps/dir/?api=1&destination=Surgiscope+Hospital+Chattogram",
     },
+    
+    // ⚡ CONTACT INFO (Floating Button)
+    // These numbers appear in the floating contact icons
     contact: {
-      phone: "+8801711946412",
-      whatsapp: "+8801711946412",
+      phone: "+8801711946412",      // For phone calls
+      whatsapp: "+8801711946412",   // For WhatsApp (include country code)
     },
+    
+    // ⚡ BOOKING CONFIGURATION
     booking_config: {
-      closed_days: [5], // Friday closed
+      // OFF DAYS: 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+      closed_days: [5],  // Friday is closed
+      
+      // TIME SLOTS: Use defaultTimeSlots or create custom array
       time_slots: defaultTimeSlots,
+      
+      // FORM FIELDS: Use defaultFormFields or customize
       form_fields: defaultFormFields,
     },
   },
+  
+  /**
+   * ========================================
+   * DOCTOR 2: Dr. Fatima Rahman
+   * ========================================
+   * Specialty: Interventional Cardiologist
+   * Chamber: Labaid Cardiac Hospital, Dhaka
+   * Off Day: Saturday (6)
+   */
   {
     id: "2",
-    slug: "dr-fatima-rahman",
+    slug: "dr-fatima-rahman",  // URL: /doctor/dr-fatima-rahman
+    
+    // Basic Information
     name_bn: "ডা. ফাতিমা রহমান",
     name_en: "Dr. Fatima Rahman",
     title_bn: "কার্ডিওলজি বিভাগের সহযোগী অধ্যাপক",
@@ -255,18 +417,26 @@ export const doctors: Doctor[] = [
     institution_en: "Dhaka Medical College & Hospital",
     specialist_bn: "ইন্টারভেনশনাল কার্ডিওলজিস্ট",
     specialist_en: "Interventional Cardiologist",
-    photo: drMuhsinImg, // Using placeholder - replace with actual photo
+    
+    // Photo - TODO: Replace with actual photo
+    photo: drMuhsinImg,  // Using placeholder - import actual photo and update
+    
+    // Biography
     bio_bn: "ডা. ফাতিমা রহমান একজন অভিজ্ঞ কার্ডিওলজিস্ট যিনি হৃদরোগ নির্ণয় ও চিকিৎসায় বিশেষজ্ঞ। তিনি এনজিওপ্লাস্টি, স্টেন্ট স্থাপন এবং হৃদযন্ত্রের জটিল পদ্ধতিতে দক্ষ।",
     bio_en: "Dr. Fatima Rahman is an experienced cardiologist specializing in heart disease diagnosis and treatment. She is skilled in angioplasty, stent placement, and complex cardiac procedures.",
+    
     qualifications: ["MBBS, MD (Cardiology)", "FRCP (UK)", "Fellowship in Interventional Cardiology"],
+    
     hero_tagline_bn: "আপনার হৃদয়ের সুস্বাস্থ্যের জন্য",
     hero_tagline_en: "For Your Heart's Health",
     hero_description_bn: "ডা. ফাতিমা রহমান হৃদরোগের আধুনিক চিকিৎসা এবং প্রতিরোধমূলক যত্ন প্রদান করেন। সর্বাধুনিক প্রযুক্তি দিয়ে আপনার হৃদয়কে সুস্থ রাখুন।",
     hero_description_en: "Dr. Fatima Rahman provides modern cardiac treatment and preventive care. Keep your heart healthy with state-of-the-art technology.",
+    
     badges: [
       { text: "FRCP (UK)" },
       { text: "Interventional Cardiologist" },
     ],
+    
     specialties: [
       {
         id: "angioplasty",
@@ -293,6 +463,8 @@ export const doctors: Doctor[] = [
         icon: "pacemaker",
       },
     ],
+    
+    // ⚡ CHAMBER SETTINGS (Different from Dr. Muhsin)
     chamber: {
       name_bn: "ল্যাবএইড কার্ডিয়াক হাসপাতাল, ঢাকা",
       name_en: "Labaid Cardiac Hospital, Dhaka",
@@ -304,38 +476,62 @@ export const doctors: Doctor[] = [
       closed_day_en: "Closed: Saturday",
       map_url: "https://www.google.com/maps/dir/?api=1&destination=Labaid+Cardiac+Hospital+Dhaka",
     },
+    
+    // ⚡ CONTACT INFO (Different phone numbers)
     contact: {
       phone: "+8801712345678",
       whatsapp: "+8801712345678",
     },
+    
+    // ⚡ BOOKING CONFIGURATION (Different off day and time slots)
     booking_config: {
-      closed_days: [6], // Saturday closed (different from Dr. Muhsin)
-      time_slots: [
-        { value: '16:00', label_en: '4:00 PM', label_bn: 'বিকাল ৪:০০' },
-        { value: '16:30', label_en: '4:30 PM', label_bn: 'বিকাল ৪:৩০' },
-        { value: '17:00', label_en: '5:00 PM', label_bn: 'বিকাল ৫:০০' },
-        { value: '17:30', label_en: '5:30 PM', label_bn: 'বিকাল ৫:৩০' },
-        { value: '18:00', label_en: '6:00 PM', label_bn: 'সন্ধ্যা ৬:০০' },
-        { value: '18:30', label_en: '6:30 PM', label_bn: 'সন্ধ্যা ৬:৩০' },
-        { value: '19:00', label_en: '7:00 PM', label_bn: 'সন্ধ্যা ৭:০০' },
-        { value: '19:30', label_en: '7:30 PM', label_bn: 'সন্ধ্যা ৭:৩০' },
-      ],
+      // Saturday is closed (different from Dr. Muhsin who has Friday closed)
+      closed_days: [6],
+      
+      // Afternoon time slots (different from Dr. Muhsin's evening slots)
+      time_slots: afternoonTimeSlots,
+      
       form_fields: defaultFormFields,
     },
   },
+  
+  // ========================================
+  // ADD MORE DOCTORS BELOW
+  // ========================================
+  // Copy the template above and modify for each new doctor
+  // Remember to:
+  // 1. Import the photo at the top
+  // 2. Give a unique id and slug
+  // 3. Customize chamber, contact, and booking_config
 ];
 
-// Helper function to get doctor by slug
+// ============================================================================
+// HELPER FUNCTIONS - Used throughout the app
+// ============================================================================
+
+/**
+ * Get a doctor by their URL slug
+ * @param slug - The URL-friendly doctor identifier
+ * @returns The doctor object or undefined
+ */
 export const getDoctorBySlug = (slug: string): Doctor | undefined => {
   return doctors.find((doctor) => doctor.slug === slug);
 };
 
-// Helper function to get all doctor slugs for routing
+/**
+ * Get all doctor slugs (for routing)
+ * @returns Array of all doctor slugs
+ */
 export const getAllDoctorSlugs = (): string[] => {
   return doctors.map((doctor) => doctor.slug);
 };
 
-// Helper function to search doctors
+/**
+ * Search doctors by name or specialty
+ * @param query - Search query string
+ * @param lang - Language ('en' or 'bn')
+ * @returns Filtered array of doctors
+ */
 export const searchDoctors = (query: string, lang: 'en' | 'bn' = 'en'): Doctor[] => {
   const searchTerm = query.toLowerCase();
   return doctors.filter((doctor) => {
