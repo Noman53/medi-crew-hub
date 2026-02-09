@@ -17,6 +17,24 @@ const Header: React.FC = () => {
   const currentDoctor = slug ? getDoctorBySlug(slug) : null;
   const isProfilePage = !!currentDoctor;
 
+  // Handle smooth scroll to section or navigate with scroll to top
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      if (href === '#top') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+      setIsMobileMenuOpen(false);
+    }
+    // For regular links (non-hash), let React Router handle navigation
+    // The scroll-to-top is handled in each page component
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -36,21 +54,6 @@ const Header: React.FC = () => {
     { id: 'services', label_en: 'Specialties', label_bn: 'বিশেষত্ব', href: '#services' },
     { id: 'locations', label_en: 'Chamber', label_bn: 'চেম্বার', href: '#locations' },
   ];
-
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith('#')) {
-      e.preventDefault();
-      if (href === '#top') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        const element = document.querySelector(href);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }
-      setIsMobileMenuOpen(false);
-    }
-  };
 
   // Other doctors (excluding current)
   const otherDoctors = isProfilePage

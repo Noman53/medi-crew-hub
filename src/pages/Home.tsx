@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { doctors } from '@/data/doctors';
 import { useLanguage } from '@/contexts/LanguageContext';
 import DoctorCard from '@/components/DoctorCard';
@@ -24,6 +25,12 @@ const Home: React.FC = () => {
   const { language, t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('name');
+  const location = useLocation();
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname]);
 
   const filteredDoctors = useMemo(() => {
     let result = [...doctors];
@@ -104,28 +111,28 @@ const Home: React.FC = () => {
         <div className="absolute top-20 left-10 w-48 h-48 sm:w-64 sm:h-64 bg-primary/10 rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-10 w-56 h-56 sm:w-80 sm:h-80 bg-accent/10 rounded-full blur-3xl" />
 
-        <div className="container mx-auto px-4 py-16 md:py-20 relative z-10">
+        <div className="container mx-auto px-4 py-20 md:py-24 relative z-10">
           <motion.div
             className="max-w-3xl mx-auto text-center"
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
           >
-            <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-5">
+            <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span className={`text-xs font-medium text-primary ${language === 'bn' ? 'font-bangla' : ''}`}>
+              <span className={`text-sm font-medium text-primary ${language === 'bn' ? 'font-bangla' : ''}`}>
                 {t('Trusted Medical Directory', 'বিশ্বস্ত মেডিকেল ডিরেক্টরি')}
               </span>
             </motion.div>
 
-            <motion.h1 variants={fadeInUp} className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-5 leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <motion.h1 variants={fadeInUp} className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
               <span className="text-foreground">{t('Find Your', 'আপনার')} </span>
               <span className="text-gradient">{t('Expert Doctor', 'বিশেষজ্ঞ ডাক্তার')}</span>
               <br className="hidden sm:block" />
               <span className="text-foreground">{t('Today', 'খুঁজুন আজই')}</span>
             </motion.h1>
 
-            <motion.p variants={fadeInUp} className={`text-sm sm:text-base text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <motion.p variants={fadeInUp} className={`text-base sm:text-lg text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t(
                 'Connect with Bangladesh\'s finest medical specialists. Book appointments with experienced doctors across multiple specialties.',
                 'বাংলাদেশের সেরা চিকিৎসা বিশেষজ্ঞদের সাথে সংযুক্ত হন। বিভিন্ন বিশেষত্বে অভিজ্ঞ ডাক্তারদের সাথে অ্যাপয়েন্টমেন্ট বুক করুন।'
@@ -145,7 +152,7 @@ const Home: React.FC = () => {
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 overflow-hidden leading-none">
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-10 md:h-16">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 md:h-20">
             <path
               d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.11,140.83,94.17,208.18,70.28,287.43,41.73,321.39,56.44,321.39,56.44Z"
               className="fill-background"
@@ -154,11 +161,11 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Features Section - Reduced gap */}
-      <section className="py-10 md:py-12 bg-background">
+      {/* Features Section */}
+      <section className="py-12 md:py-16 bg-background">
         <div className="container mx-auto px-4">
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6"
+            className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-8"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-60px' }}
@@ -168,16 +175,16 @@ const Home: React.FC = () => {
               <motion.div
                 key={index}
                 variants={fadeInUp}
-                className="flex items-start gap-3 p-4 sm:p-5 rounded-xl bg-card border border-border hover:shadow-md hover:border-primary/20 transition-all duration-300"
+                className="flex items-start gap-4 p-5 sm:p-6 rounded-xl bg-card border border-border hover:shadow-md hover:border-primary/20 transition-all duration-300"
               >
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <feature.icon className="w-5 h-5 text-primary" />
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <feature.icon className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className={`font-bold text-foreground text-sm sm:text-base ${language === 'bn' ? 'font-bangla' : ''}`}>
+                  <h3 className={`font-bold text-foreground text-lg ${language === 'bn' ? 'font-bangla' : ''}`}>
                     {language === 'en' ? feature.title_en : feature.title_bn}
                   </h3>
-                  <p className={`text-xs text-muted-foreground mt-0.5 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                  <p className={`text-sm text-muted-foreground mt-1 ${language === 'bn' ? 'font-bangla' : ''}`}>
                     {language === 'en' ? feature.desc_en : feature.desc_bn}
                   </p>
                 </div>
@@ -187,11 +194,11 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Stats Section - Reduced gap */}
-      <section className="py-10 md:py-12 bg-secondary/30">
+      {/* Stats Section */}
+      <section className="py-12 md:py-16 bg-secondary/30">
         <div className="container mx-auto px-4">
           <motion.div
-            className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6"
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5 lg:gap-8"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-60px' }}
@@ -201,13 +208,13 @@ const Home: React.FC = () => {
               <motion.div
                 key={index}
                 variants={fadeInUp}
-                className="text-center p-4 sm:p-5 rounded-xl bg-card border border-border hover:shadow-md transition-all duration-300"
+                className="text-center p-5 sm:p-6 rounded-xl bg-card border border-border hover:shadow-md transition-all duration-300"
               >
-                <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary/10 text-primary mb-2 sm:mb-3">
-                  <stat.icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-primary/10 text-primary mb-3 sm:mb-4">
+                  <stat.icon className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
-                <p className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">{stat.value}</p>
-                <p className={`text-xs text-muted-foreground mt-0.5 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">{stat.value}</p>
+                <p className={`text-sm text-muted-foreground mt-1 ${language === 'bn' ? 'font-bangla' : ''}`}>
                   {language === 'en' ? stat.label_en : stat.label_bn}
                 </p>
               </motion.div>
@@ -216,23 +223,23 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Doctors Grid - Reduced gap */}
-      <section className="py-10 md:py-14 bg-background" id="doctors">
+      {/* Doctors Grid */}
+      <section className="py-12 md:py-16 bg-background" id="doctors">
         <div className="container mx-auto px-4">
           <motion.div
-            className="text-center mb-8"
+            className="text-center mb-10"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-60px' }}
             variants={fadeInUp}
           >
-            <span className={`text-xs font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
+            <span className={`text-sm font-semibold text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
               {t('Our Specialists', 'আমাদের বিশেষজ্ঞগণ')}
             </span>
-            <h2 className={`text-xl sm:text-2xl md:text-3xl font-bold mt-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold mt-3 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t('Meet Our Expert Doctors', 'আমাদের বিশেষজ্ঞ ডাক্তারদের সাথে পরিচিত হন')}
             </h2>
-            <p className={`text-muted-foreground mt-3 max-w-2xl mx-auto text-sm ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <p className={`text-muted-foreground mt-4 max-w-2xl mx-auto text-base sm:text-lg ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t(
                 'Choose from our team of highly qualified medical professionals dedicated to your health.',
                 'আপনার স্বাস্থ্যের জন্য নিবেদিত আমাদের উচ্চ যোগ্যতাসম্পন্ন চিকিৎসা পেশাদারদের দল থেকে বেছে নিন।'
@@ -242,7 +249,7 @@ const Home: React.FC = () => {
 
           {filteredDoctors.length > 0 ? (
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 lg:gap-8"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: '-60px' }}
@@ -255,8 +262,8 @@ const Home: React.FC = () => {
               ))}
             </motion.div>
           ) : (
-            <div className="text-center py-12">
-              <p className={`text-base text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <div className="text-center py-16">
+              <p className={`text-lg text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
                 {t('No doctors found matching your search.', 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো ডাক্তার পাওয়া যায়নি।')}
               </p>
             </div>
@@ -264,8 +271,8 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* CTA Section - Reduced gap */}
-      <section className="py-10 md:py-14 hero-gradient">
+      {/* CTA Section */}
+      <section className="py-12 md:py-16 hero-gradient">
         <div className="container mx-auto px-4">
           <motion.div
             className="max-w-2xl mx-auto text-center"
@@ -274,10 +281,10 @@ const Home: React.FC = () => {
             viewport={{ once: true, margin: '-60px' }}
             variants={staggerContainer}
           >
-            <motion.h2 variants={fadeInUp} className={`text-xl sm:text-2xl md:text-3xl font-bold mb-4 ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <motion.h2 variants={fadeInUp} className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-5 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t('Ready to Book Your Appointment?', 'আপনার অ্যাপয়েন্টমেন্ট বুক করতে প্রস্তুত?')}
             </motion.h2>
-            <motion.p variants={fadeInUp} className={`text-sm sm:text-base text-muted-foreground mb-6 ${language === 'bn' ? 'font-bangla' : ''}`}>
+            <motion.p variants={fadeInUp} className={`text-base sm:text-lg text-muted-foreground mb-8 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t(
                 'Select a doctor from our directory and schedule your consultation today.',
                 'আমাদের ডিরেক্টরি থেকে একজন ডাক্তার নির্বাচন করুন এবং আজই আপনার পরামর্শ সিডিউল করুন।'
@@ -286,7 +293,7 @@ const Home: React.FC = () => {
             <motion.a
               variants={fadeInUp}
               href="#doctors"
-              className={`btn-primary-gradient px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-medium inline-block ${language === 'bn' ? 'font-bangla' : ''}`}
+              className={`btn-primary-gradient px-8 sm:px-10 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold inline-block ${language === 'bn' ? 'font-bangla' : ''}`}
             >
               {t('Browse All Doctors', 'সব ডাক্তার ব্রাউজ করুন')}
             </motion.a>

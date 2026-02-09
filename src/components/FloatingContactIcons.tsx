@@ -1,11 +1,25 @@
+/**
+ * FLOATING CONTACT ICONS COMPONENT
+ * =================================
+ * 
+ * Displays a floating action button with expandable contact options.
+ * Shows WhatsApp and Phone buttons on hover.
+ * 
+ * Props:
+ * - phone: Phone number for calls (from doctor.contact.phone)
+ * - whatsapp: WhatsApp number (from doctor.contact.whatsapp)
+ * 
+ * Configuration is done per-doctor in doctors.ts under the `contact` object.
+ */
+
 import React, { useState } from 'react';
 import { Phone, MessageCircle, HeadphonesIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface FloatingContactIconsProps {
-  phone: string;
-  whatsapp: string;
+  phone: string;      // Phone number for calls
+  whatsapp: string;   // WhatsApp number (include country code)
 }
 
 const FloatingContactIcons: React.FC<FloatingContactIconsProps> = ({ phone, whatsapp }) => {
@@ -18,9 +32,9 @@ const FloatingContactIcons: React.FC<FloatingContactIconsProps> = ({ phone, what
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Main Toggle Button */}
+      {/* Main Toggle Button - Always visible */}
       <motion.div
-        className="relative flex items-center justify-center w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-xl cursor-pointer"
+        className="relative flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-primary text-primary-foreground shadow-xl cursor-pointer"
         style={{
           boxShadow: '0 4px 20px hsl(174 72% 40% / 0.4)',
         }}
@@ -28,11 +42,12 @@ const FloatingContactIcons: React.FC<FloatingContactIconsProps> = ({ phone, what
         whileTap={{ scale: 0.95 }}
         aria-label={t('Contact options', 'যোগাযোগের বিকল্প')}
       >
-        <HeadphonesIcon className="w-7 h-7" />
+        <HeadphonesIcon className="w-7 h-7 md:w-8 md:h-8" />
         {/* Pulse ring animation */}
         <span className="absolute inset-0 rounded-full bg-primary/30 animate-ping" />
       </motion.div>
 
+      {/* Expandable options - Show on hover */}
       <AnimatePresence>
         {isHovered && (
           <>
@@ -43,14 +58,14 @@ const FloatingContactIcons: React.FC<FloatingContactIconsProps> = ({ phone, what
               exit={{ opacity: 0, scale: 0.5, y: 10 }}
               transition={{ duration: 0.2 }}
               href={`tel:${phone}`}
-              className="group relative flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-lg hover:scale-110 transition-transform duration-300"
+              className="group relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary text-primary-foreground shadow-lg hover:scale-110 transition-transform duration-300"
               style={{
                 boxShadow: '0 4px 15px hsl(174 72% 40% / 0.4)',
               }}
               aria-label={t('Call Now', 'এখনই কল করুন')}
             >
-              <Phone className="w-5 h-5" />
-              <span className="absolute right-full mr-3 px-3 py-1.5 rounded-lg bg-foreground text-background text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none shadow-lg">
+              <Phone className="w-5 h-5 md:w-6 md:h-6" />
+              <span className="absolute right-full mr-3 px-3 py-2 rounded-lg bg-foreground text-background text-sm font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none shadow-lg">
                 {t('Call Now', 'এখনই কল করুন')}
               </span>
             </motion.a>
@@ -64,15 +79,15 @@ const FloatingContactIcons: React.FC<FloatingContactIconsProps> = ({ phone, what
               href={`https://wa.me/${whatsapp.replace(/\+/g, '')}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative flex items-center justify-center w-12 h-12 rounded-full shadow-lg hover:scale-110 transition-transform duration-300"
+              className="group relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full shadow-lg hover:scale-110 transition-transform duration-300"
               style={{
                 backgroundColor: '#25D366',
                 boxShadow: '0 4px 15px rgba(37, 211, 102, 0.4)',
               }}
               aria-label={t('Chat on WhatsApp', 'হোয়াটসঅ্যাপে চ্যাট করুন')}
             >
-              <MessageCircle className="w-5 h-5 text-white fill-white" />
-              <span className="absolute right-full mr-3 px-3 py-1.5 rounded-lg bg-foreground text-background text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none shadow-lg">
+              <MessageCircle className="w-5 h-5 md:w-6 md:h-6 text-white fill-white" />
+              <span className="absolute right-full mr-3 px-3 py-2 rounded-lg bg-foreground text-background text-sm font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none shadow-lg">
                 {t('WhatsApp', 'হোয়াটসঅ্যাপ')}
               </span>
             </motion.a>

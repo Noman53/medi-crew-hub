@@ -1,3 +1,16 @@
+/**
+ * BOOKING WIZARD COMPONENT
+ * ========================
+ * 
+ * 3-step appointment booking wizard:
+ * 1. Select Date (with dynamic off-days per doctor)
+ * 2. Select Time (custom time slots per doctor)
+ * 3. Enter Details (customizable form fields)
+ * 
+ * Configuration is passed via `bookingConfig` prop from doctors.ts
+ * See doctors.ts for customization options per doctor.
+ */
+
 import React, { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ChevronLeft, ChevronRight, Calendar, Clock, User, Check } from 'lucide-react';
@@ -19,9 +32,10 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, bookingConfig
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   // Use doctor's custom config or defaults
+  // These are dynamically loaded from the doctor's booking_config in doctors.ts
   const timeSlots = bookingConfig?.time_slots || defaultTimeSlots;
   const formFields = bookingConfig?.form_fields || defaultFormFields;
-  const closedDays = bookingConfig?.closed_days || [5]; // Default Friday
+  const closedDays = bookingConfig?.closed_days || [5]; // Default Friday closed
 
   const monthNames = language === 'en'
     ? ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -45,7 +59,11 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, bookingConfig
     return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
   };
 
-  // Dynamic closed day check based on doctor's config
+  /**
+   * DYNAMIC CLOSED DAY CHECK
+   * Uses the doctor's closed_days array from booking_config
+   * Day numbers: 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+   */
   const isDateDisabled = (day: number) => {
     const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
     const today = new Date();
@@ -102,19 +120,15 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, bookingConfig
     return false;
   };
 
-  // Split form fields into two columns
-  const leftFields = formFields.filter((_, i) => i % 2 === 0);
-  const rightFields = formFields.filter((_, i) => i % 2 === 1);
-
   return (
-    <div className="max-w-xl mx-auto">
+    <div className="max-w-2xl mx-auto">
       {/* Steps indicator */}
-      <div className="flex justify-center items-center gap-3 sm:gap-4 mb-6">
+      <div className="flex justify-center items-center gap-4 sm:gap-6 mb-8">
         {steps.map((step, index) => (
           <React.Fragment key={step.num}>
-            <div className="flex flex-col items-center gap-1.5">
+            <div className="flex flex-col items-center gap-2">
               <motion.div
-                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
+                className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-bold text-base transition-all duration-300 ${
                   currentStep > step.num
                     ? 'bg-primary text-primary-foreground'
                     : currentStep === step.num
@@ -123,21 +137,21 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, bookingConfig
                 }`}
                 animate={{ scale: currentStep === step.num ? 1.1 : 1 }}
               >
-                {currentStep > step.num ? <Check className="w-4 h-4" /> : step.num}
+                {currentStep > step.num ? <Check className="w-5 h-5" /> : step.num}
               </motion.div>
-              <span className={`text-xs font-medium ${currentStep >= step.num ? 'text-foreground' : 'text-muted-foreground'} ${language === 'bn' ? 'font-bangla' : ''}`}>
+              <span className={`text-sm font-medium ${currentStep >= step.num ? 'text-foreground' : 'text-muted-foreground'} ${language === 'bn' ? 'font-bangla' : ''}`}>
                 {language === 'en' ? step.label_en : step.label_bn}
               </span>
             </div>
             {index < steps.length - 1 && (
-              <div className={`w-8 sm:w-12 h-0.5 ${currentStep > step.num ? 'bg-primary' : 'bg-muted'} transition-colors duration-300`} />
+              <div className={`w-10 sm:w-16 h-0.5 ${currentStep > step.num ? 'bg-primary' : 'bg-muted'} transition-colors duration-300`} />
             )}
           </React.Fragment>
         ))}
       </div>
 
       {/* Step content */}
-      <div className="card-elevated p-4 sm:p-6 min-h-[360px]">
+      <div className="card-elevated p-5 sm:p-8 min-h-[380px]">
         <AnimatePresence mode="wait">
           {/* Step 1: Date Selection */}
           {currentStep === 1 && (
@@ -149,20 +163,20 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, bookingConfig
               transition={{ duration: 0.3 }}
             >
               {/* Month navigation with arrows */}
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-5">
                 <button
                   onClick={handlePrevMonth}
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
                   aria-label={t('Previous month', 'আগের মাস')}
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
-                <h3 className={`text-base sm:text-lg font-bold ${language === 'bn' ? 'font-bangla' : ''}`}>
+                <h3 className={`text-lg sm:text-xl font-bold ${language === 'bn' ? 'font-bangla' : ''}`}>
                   {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
                 </h3>
                 <button
                   onClick={handleNextMonth}
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
                   aria-label={t('Next month', 'পরের মাস')}
                 >
                   <ChevronRight className="w-5 h-5" />
@@ -170,9 +184,9 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, bookingConfig
               </div>
 
               {/* Day headers */}
-              <div className="grid grid-cols-7 gap-1 mb-2">
+              <div className="grid grid-cols-7 gap-1 mb-3">
                 {dayNames.map((day) => (
-                  <div key={day} className={`text-center text-xs font-medium text-muted-foreground py-1.5 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                  <div key={day} className={`text-center text-sm font-medium text-muted-foreground py-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
                     {day}
                   </div>
                 ))}
@@ -194,7 +208,7 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, bookingConfig
                       key={day}
                       onClick={() => handleDateSelect(day)}
                       disabled={disabled}
-                      className={`aspect-square rounded-lg flex items-center justify-center text-sm font-medium transition-all duration-200
+                      className={`aspect-square rounded-lg flex items-center justify-center text-base font-medium transition-all duration-200
                         ${selected ? 'bg-primary text-primary-foreground scale-105' : ''}
                         ${isClosedDay && !selected ? 'text-destructive/50' : ''}
                         ${disabled && !isClosedDay ? 'text-muted-foreground/40' : ''}
@@ -218,13 +232,13 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, bookingConfig
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
-              className="space-y-4"
+              className="space-y-5"
             >
-              <div className="text-center mb-4">
-                <p className={`text-xs text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
+              <div className="text-center mb-5">
+                <p className={`text-sm text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
                   {t('Selected Date:', 'নির্বাচিত তারিখ:')}
                 </p>
-                <p className={`text-base font-bold ${language === 'bn' ? 'font-bangla' : ''}`}>
+                <p className={`text-lg font-bold ${language === 'bn' ? 'font-bangla' : ''}`}>
                   {selectedDate?.toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
                     weekday: 'long',
                     year: 'numeric',
@@ -234,18 +248,18 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, bookingConfig
                 </p>
               </div>
 
-              <p className={`text-xs text-muted-foreground mb-3 ${language === 'bn' ? 'font-bangla' : ''}`}>
+              <p className={`text-sm text-muted-foreground mb-4 ${language === 'bn' ? 'font-bangla' : ''}`}>
                 {t('Choose a time slot:', 'একটি সময় বেছে নিন:')}
               </p>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {timeSlots.map((slot) => (
                   <motion.button
                     key={slot.value}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setSelectedTime(slot.value)}
-                    className={`p-3 rounded-xl border-2 font-medium transition-all duration-200 text-sm
+                    className={`p-4 rounded-xl border-2 font-semibold transition-all duration-200 text-base
                       ${selectedTime === slot.value
                         ? 'border-primary bg-primary/10 text-primary'
                         : 'border-border hover:border-primary/50 text-foreground'
@@ -267,10 +281,10 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, bookingConfig
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
-              className="space-y-4"
+              className="space-y-5"
             >
-              <div className="text-center mb-4">
-                <p className={`text-xs text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
+              <div className="text-center mb-5">
+                <p className={`text-sm text-muted-foreground ${language === 'bn' ? 'font-bangla' : ''}`}>
                   {selectedDate?.toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
                     weekday: 'long',
                     month: 'long',
@@ -279,21 +293,21 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, bookingConfig
                 </p>
               </div>
 
-              {/* Two column form layout */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Two column form layout - Dynamic form fields from booking_config */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {formFields.map((field) => (
                   <div key={field.id} className={field.type === 'textarea' ? 'sm:col-span-2' : ''}>
-                    <label className={`block text-xs font-medium mb-1.5 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    <label className={`block text-sm font-semibold mb-2 ${language === 'bn' ? 'font-bangla' : ''}`}>
                       {language === 'en' ? field.label_en : field.label_bn}
-                      {field.required && <span className="text-destructive ml-0.5">*</span>}
+                      {field.required && <span className="text-destructive ml-1">*</span>}
                     </label>
                     {field.type === 'textarea' ? (
                       <textarea
                         value={formData[field.id] || ''}
                         onChange={(e) => setFormData({ ...formData, [field.id]: e.target.value })}
                         placeholder={language === 'en' ? field.placeholder_en : field.placeholder_bn}
-                        rows={2}
-                        className={`w-full px-3 py-2.5 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none text-sm ${language === 'bn' ? 'font-bangla' : ''}`}
+                        rows={3}
+                        className={`w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none text-base ${language === 'bn' ? 'font-bangla' : ''}`}
                       />
                     ) : (
                       <input
@@ -301,7 +315,7 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, bookingConfig
                         value={formData[field.id] || ''}
                         onChange={(e) => setFormData({ ...formData, [field.id]: e.target.value })}
                         placeholder={language === 'en' ? field.placeholder_en : field.placeholder_bn}
-                        className={`w-full px-3 py-2.5 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-sm ${language === 'bn' ? 'font-bangla' : ''}`}
+                        className={`w-full px-4 py-3 rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-base ${language === 'bn' ? 'font-bangla' : ''}`}
                       />
                     )}
                   </div>
@@ -312,14 +326,14 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, bookingConfig
         </AnimatePresence>
       </div>
 
-      {/* Navigation buttons */}
-      <div className="flex justify-between mt-5">
+      {/* Navigation buttons - Responsive sizing */}
+      <div className="flex justify-between mt-6">
         <button
           onClick={() => setCurrentStep(currentStep - 1)}
           disabled={currentStep === 1}
-          className={`px-4 sm:px-5 py-2.5 rounded-full font-medium border-2 border-border text-muted-foreground hover:border-primary hover:text-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm ${language === 'bn' ? 'font-bangla' : ''}`}
+          className={`px-5 sm:px-6 py-3 rounded-full font-semibold border-2 border-border text-muted-foreground hover:border-primary hover:text-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed text-base ${language === 'bn' ? 'font-bangla' : ''}`}
         >
-          <ChevronLeft className="w-4 h-4 inline mr-1" />
+          <ChevronLeft className="w-5 h-5 inline mr-1" />
           {t('Back', 'পেছনে')}
         </button>
 
@@ -327,16 +341,16 @@ const BookingWizard: React.FC<BookingWizardProps> = ({ doctorName, bookingConfig
           <button
             onClick={() => setCurrentStep(currentStep + 1)}
             disabled={!canProceed()}
-            className={`btn-primary-gradient px-4 sm:px-5 py-2.5 rounded-full font-medium disabled:opacity-50 disabled:cursor-not-allowed text-sm ${language === 'bn' ? 'font-bangla' : ''}`}
+            className={`btn-primary-gradient px-5 sm:px-6 py-3 rounded-full font-semibold disabled:opacity-50 disabled:cursor-not-allowed text-base ${language === 'bn' ? 'font-bangla' : ''}`}
           >
             {t('Next', 'পরবর্তী')}
-            <ChevronRight className="w-4 h-4 inline ml-1" />
+            <ChevronRight className="w-5 h-5 inline ml-1" />
           </button>
         ) : (
           <button
             onClick={handleSubmit}
             disabled={!canProceed()}
-            className={`btn-primary-gradient px-5 sm:px-6 py-2.5 rounded-full font-medium disabled:opacity-50 disabled:cursor-not-allowed text-sm ${language === 'bn' ? 'font-bangla' : ''}`}
+            className={`btn-primary-gradient px-6 sm:px-8 py-3 rounded-full font-semibold disabled:opacity-50 disabled:cursor-not-allowed text-base ${language === 'bn' ? 'font-bangla' : ''}`}
           >
             {t('Confirm Booking', 'বুকিং নিশ্চিত করুন')}
           </button>
