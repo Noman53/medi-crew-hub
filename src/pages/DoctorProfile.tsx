@@ -184,9 +184,9 @@ const DoctorProfile: React.FC = () => {
               </motion.div>
             </motion.div>
 
-            {/* Right Content - Doctor Image with Title Card BELOW - Larger and more to left */}
+            {/* Right Content - Doctor Image with Title Card BELOW */}
             <motion.div
-              className="relative flex flex-col items-center lg:items-start order-1 lg:order-2"
+              className="relative flex flex-col items-center order-1 lg:order-2"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -194,7 +194,7 @@ const DoctorProfile: React.FC = () => {
               {/* Decorative blur circle */}
               <div className="absolute w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full bg-gradient-to-br from-primary/20 to-accent/10 blur-3xl -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
 
-              {/* Doctor Image - Larger circular with proper sizing */}
+              {/* Doctor Image - Circular */}
               <div className="w-52 h-52 sm:w-60 sm:h-60 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl bg-secondary">
                 <img
                   src={doctor.photo}
@@ -203,9 +203,9 @@ const DoctorProfile: React.FC = () => {
                 />
               </div>
 
-              {/* Info Card - Positioned BELOW the image, matching width */}
+              {/* Info Card - BELOW image, dynamic width to show all content */}
               <motion.div
-                className="glass-menu rounded-xl p-4 shadow-lg mt-5 w-52 sm:w-60 md:w-72 lg:w-80"
+                className="glass-menu rounded-xl p-4 shadow-lg mt-5 w-full max-w-xs sm:max-w-sm"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.4 }}
@@ -215,10 +215,10 @@ const DoctorProfile: React.FC = () => {
                     <Stethoscope className="w-5 h-5 text-primary-foreground" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className={`font-bold text-foreground text-base leading-tight truncate ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    <p className={`font-bold text-foreground text-base leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
                       {language === 'en' ? doctor.name_en : doctor.name_bn}
                     </p>
-                    <p className={`text-sm text-primary leading-tight truncate ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    <p className={`text-sm text-primary leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
                       {language === 'en' ? doctor.specialist_en : doctor.specialist_bn}
                     </p>
                   </div>
