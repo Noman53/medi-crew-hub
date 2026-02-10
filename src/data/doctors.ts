@@ -495,15 +495,162 @@ export const doctors: Doctor[] = [
       form_fields: defaultFormFields,
     },
   },
-  
-  // ========================================
-  // ADD MORE DOCTORS BELOW
-  // ========================================
-  // Copy the template above and modify for each new doctor
-  // Remember to:
-  // 1. Import the photo at the top
-  // 2. Give a unique id and slug
-  // 3. Customize chamber, contact, and booking_config
+
+  /**
+   * ========================================
+   * DOCTOR 3: Dr. Abdul Karim
+   * ========================================
+   * Specialty: Orthopedic Surgeon
+   * Chamber: National Institute of Traumatology, Dhaka
+   * Off Day: Sunday (0)
+   */
+  {
+    id: "3",
+    slug: "dr-abdul-karim",
+    name_bn: "ডা. আব্দুল করিম",
+    name_en: "Dr. Abdul Karim",
+    title_bn: "অর্থোপেডিক সার্জারি বিভাগের অধ্যাপক",
+    title_en: "Professor of Orthopedic Surgery",
+    institution_bn: "জাতীয় ট্রমাটোলজি ও অর্থোপেডিক পুনর্বাসন ইনস্টিটিউট",
+    institution_en: "National Institute of Traumatology & Orthopedic Rehabilitation",
+    specialist_bn: "অর্থোপেডিক ও স্পাইন সার্জন",
+    specialist_en: "Orthopedic & Spine Surgeon",
+    photo: drKarimImg,
+    bio_bn: "ডা. আব্দুল করিম একজন অভিজ্ঞ অর্থোপেডিক সার্জন যিনি হাড় ও জয়েন্টের চিকিৎসায় বিশেষজ্ঞ। তিনি মেরুদণ্ড, হাঁটু ও কোমরের জটিল সার্জারিতে দক্ষ।",
+    bio_en: "Dr. Abdul Karim is an experienced orthopedic surgeon specializing in bone and joint treatment. He is skilled in complex spine, knee, and hip surgeries.",
+    qualifications: ["MBBS, MS (Orthopedics)", "Fellow AO Spine", "FRCS (Edinburgh)", "FICS"],
+    hero_tagline_bn: "হাড় ও জয়েন্টের সুস্বাস্থ্যের জন্য",
+    hero_tagline_en: "Bone & Joint Health",
+    hero_description_bn: "ডা. আব্দুল করিম অর্থোপেডিক সার্জারিতে আধুনিক চিকিৎসা প্রদান করেন। মেরুদণ্ড, হাঁটু এবং কোমরের সমস্যার সুচিকিৎসা।",
+    hero_description_en: "Dr. Abdul Karim provides modern orthopedic surgical care. Expert treatment for spine, knee, and hip conditions.",
+    badges: [{ text: "FRCS (Edinburgh)" }, { text: "AO Spine Fellow" }, { text: "Spine Specialist" }],
+    specialties: [
+      { id: "spine", name_bn: "মেরুদণ্ড", name_en: "Spine Surgery", description_bn: "মেরুদণ্ডের জটিল অবস্থার অস্ত্রোপচার চিকিৎসা।", description_en: "Surgical treatment for complex spinal conditions.", icon: "hernia" },
+      { id: "knee", name_bn: "হাঁটু প্রতিস্থাপন", name_en: "Knee Replacement", description_bn: "আর্থ্রাইটিসের জন্য টোটাল নি রিপ্লেসমেন্ট।", description_en: "Total knee replacement for arthritis.", icon: "hernia" },
+      { id: "trauma", name_bn: "ট্রমা কেয়ার", name_en: "Trauma Care", description_bn: "ফ্র্যাকচার ও আঘাতের জরুরি অস্ত্রোপচার।", description_en: "Emergency surgery for fractures and injuries.", icon: "appendix" },
+    ],
+    chamber: {
+      name_bn: "ইবনে সিনা হাসপাতাল, ঢাকা",
+      name_en: "Ibn Sina Hospital, Dhaka",
+      address_bn: "বাড়ি ৪৮, রোড ৯/এ, ধানমন্ডি, ঢাকা - ১২০৯",
+      address_en: "House 48, Road 9/A, Dhanmondi, Dhaka - 1209",
+      visiting_hours_bn: "বিকাল ৫টা থেকে রাত ৮টা",
+      visiting_hours_en: "5pm to 8pm",
+      closed_day_bn: "রবিবার বন্ধ",
+      closed_day_en: "Closed: Sunday",
+      map_url: "https://www.google.com/maps/dir/?api=1&destination=Ibn+Sina+Hospital+Dhaka",
+    },
+    contact: { phone: "+8801819876543", whatsapp: "+8801819876543" },
+    booking_config: {
+      closed_days: [0], // Sunday closed
+      time_slots: defaultTimeSlots,
+      form_fields: defaultFormFields,
+    },
+  },
+
+  /**
+   * ========================================
+   * DOCTOR 4: Dr. Nazneen Akter
+   * ========================================
+   * Specialty: Gynecology & Obstetrics
+   * Chamber: Evercare Hospital, Dhaka
+   * Off Day: Thursday (4)
+   */
+  {
+    id: "4",
+    slug: "dr-nazneen-akter",
+    name_bn: "ডা. নাজনীন আক্তার",
+    name_en: "Dr. Nazneen Akter",
+    title_bn: "গাইনি ও অবস বিভাগের সহযোগী অধ্যাপক",
+    title_en: "Associate Professor of Gynecology & Obstetrics",
+    institution_bn: "এভারকেয়ার হাসপাতাল, ঢাকা",
+    institution_en: "Evercare Hospital, Dhaka",
+    specialist_bn: "গাইনি ও প্রসূতি বিশেষজ্ঞ",
+    specialist_en: "Gynecology & Obstetrics Specialist",
+    photo: drNazneenImg,
+    bio_bn: "ডা. নাজনীন আক্তার মহিলাদের স্বাস্থ্য সেবায় নিবেদিত একজন অভিজ্ঞ গাইনি বিশেষজ্ঞ। তিনি উচ্চ ঝুঁকিপূর্ণ গর্ভাবস্থা এবং ল্যাপারোস্কপিক গাইনি সার্জারিতে দক্ষ।",
+    bio_en: "Dr. Nazneen Akter is an experienced gynecologist dedicated to women's health. She specializes in high-risk pregnancies and laparoscopic gynecological surgery.",
+    qualifications: ["MBBS, FCPS (Gynae)", "MS (Obs & Gynae)", "Fellowship in Reproductive Medicine"],
+    hero_tagline_bn: "মহিলাদের সুস্বাস্থ্যের জন্য",
+    hero_tagline_en: "Women's Health & Wellness",
+    hero_description_bn: "ডা. নাজনীন আক্তার মহিলাদের সম্পূর্ণ স্বাস্থ্য সেবা প্রদান করেন। গর্ভাবস্থা, প্রসব এবং গাইনি সমস্যার আধুনিক চিকিৎসা।",
+    hero_description_en: "Dr. Nazneen Akter provides comprehensive women's health care. Modern treatment for pregnancy, delivery, and gynecological conditions.",
+    badges: [{ text: "FCPS (Gynae)" }, { text: "Reproductive Medicine" }],
+    specialties: [
+      { id: "pregnancy", name_bn: "উচ্চ ঝুঁকি গর্ভাবস্থা", name_en: "High-Risk Pregnancy", description_bn: "জটিল গর্ভাবস্থার বিশেষজ্ঞ ব্যবস্থাপনা।", description_en: "Specialized management of complex pregnancies.", icon: "heart" },
+      { id: "laparoscopy", name_bn: "ল্যাপারোস্কপি", name_en: "Laparoscopy", description_bn: "ন্যূনতম আক্রমণাত্মক গাইনি সার্জারি।", description_en: "Minimally invasive gynecological surgery.", icon: "ecg" },
+      { id: "fertility", name_bn: "বন্ধ্যাত্ব চিকিৎসা", name_en: "Fertility Treatment", description_bn: "বন্ধ্যাত্বের আধুনিক চিকিৎসা।", description_en: "Modern fertility treatment options.", icon: "heart" },
+    ],
+    chamber: {
+      name_bn: "এভারকেয়ার হাসপাতাল, ঢাকা",
+      name_en: "Evercare Hospital, Dhaka",
+      address_bn: "প্লট ৮১, ব্লক ই, বশুন্ধরা, ঢাকা - ১২২৯",
+      address_en: "Plot 81, Block E, Bashundhara, Dhaka - 1229",
+      visiting_hours_bn: "সকাল ১০টা থেকে দুপুর ১টা",
+      visiting_hours_en: "10am to 1pm",
+      closed_day_bn: "বৃহস্পতিবার বন্ধ",
+      closed_day_en: "Closed: Thursday",
+      map_url: "https://www.google.com/maps/dir/?api=1&destination=Evercare+Hospital+Dhaka",
+    },
+    contact: { phone: "+8801755432100", whatsapp: "+8801755432100" },
+    booking_config: {
+      closed_days: [4], // Thursday closed
+      time_slots: afternoonTimeSlots,
+      form_fields: defaultFormFields,
+    },
+  },
+
+  /**
+   * ========================================
+   * DOCTOR 5: Dr. Md. Rafiqul Hossain
+   * ========================================
+   * Specialty: Neurologist
+   * Chamber: Square Hospital, Dhaka
+   * Off Day: Tuesday (2)
+   */
+  {
+    id: "5",
+    slug: "dr-rafiqul-hossain",
+    name_bn: "ডা. মো. রফিকুল হোসেন",
+    name_en: "Dr. Md. Rafiqul Hossain",
+    title_bn: "নিউরোলজি বিভাগের অধ্যাপক",
+    title_en: "Professor of Neurology",
+    institution_bn: "স্কয়ার হাসপাতাল, ঢাকা",
+    institution_en: "Square Hospital, Dhaka",
+    specialist_bn: "নিউরোলজিস্ট ও স্ট্রোক বিশেষজ্ঞ",
+    specialist_en: "Neurologist & Stroke Specialist",
+    photo: drHossainImg,
+    bio_bn: "ডা. মো. রফিকুল হোসেন একজন প্রখ্যাত নিউরোলজিস্ট। তিনি স্ট্রোক, মৃগী, মাথাব্যথা এবং স্নায়ুতন্ত্রের জটিল রোগের চিকিৎসায় বিশেষজ্ঞ।",
+    bio_en: "Dr. Md. Rafiqul Hossain is a renowned neurologist. He specializes in stroke, epilepsy, headache, and complex nervous system disorders.",
+    qualifications: ["MBBS, MD (Neurology)", "MRCP (UK)", "Fellow of Neurology (USA)", "FACP"],
+    hero_tagline_bn: "স্নায়ু স্বাস্থ্যের জন্য বিশেষজ্ঞ যত্ন",
+    hero_tagline_en: "Expert Neurological Care",
+    hero_description_bn: "ডা. রফিকুল হোসেন স্নায়ুতন্ত্রের আধুনিক চিকিৎসা প্রদান করেন। স্ট্রোক, মৃগী এবং মাথাব্যথার সুচিকিৎসা।",
+    hero_description_en: "Dr. Rafiqul Hossain provides modern neurological treatment. Expert care for stroke, epilepsy, and headache disorders.",
+    badges: [{ text: "MRCP (UK)" }, { text: "FACP" }, { text: "Stroke Specialist" }],
+    specialties: [
+      { id: "stroke", name_bn: "স্ট্রোক", name_en: "Stroke Treatment", description_bn: "স্ট্রোকের জরুরি ও পুনর্বাসন চিকিৎসা।", description_en: "Emergency and rehabilitation stroke care.", icon: "ecg" },
+      { id: "epilepsy", name_bn: "মৃগী রোগ", name_en: "Epilepsy", description_bn: "মৃগী রোগের আধুনিক ওষুধ ও ব্যবস্থাপনা।", description_en: "Modern medication and management for epilepsy.", icon: "ecg" },
+      { id: "headache", name_bn: "মাথাব্যথা", name_en: "Headache Disorders", description_bn: "মাইগ্রেন ও দীর্ঘস্থায়ী মাথাব্যথার চিকিৎসা।", description_en: "Treatment for migraine and chronic headache.", icon: "ecg" },
+    ],
+    chamber: {
+      name_bn: "স্কয়ার হাসপাতাল, ঢাকা",
+      name_en: "Square Hospital, Dhaka",
+      address_bn: "১৮/এফ, বীর উত্তম কাজী নুরুজ্জামান সড়ক, পশ্চিম পান্থপথ, ঢাকা - ১২০৫",
+      address_en: "18/F, Bir Uttam Qazi Nuruzzaman Sarak, West Panthapath, Dhaka - 1205",
+      visiting_hours_bn: "সন্ধ্যা ৬টা থেকে রাত ৯টা",
+      visiting_hours_en: "6pm to 9pm",
+      closed_day_bn: "মঙ্গলবার বন্ধ",
+      closed_day_en: "Closed: Tuesday",
+      map_url: "https://www.google.com/maps/dir/?api=1&destination=Square+Hospital+Dhaka",
+    },
+    contact: { phone: "+8801911223344", whatsapp: "+8801911223344" },
+    booking_config: {
+      closed_days: [2], // Tuesday closed
+      time_slots: defaultTimeSlots,
+      form_fields: defaultFormFields,
+    },
+  },
 ];
 
 // ============================================================================
