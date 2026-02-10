@@ -255,9 +255,10 @@ export const defaultFormFields: FormField[] = [
 // DOCTOR PHOTOS - Import all doctor images here
 // ============================================================================
 import drMuhsinImg from '@/assets/doctors/dr-muhsin.jpg';
-// TODO: Add more doctor photos below:
-// import drFatimaImg from '@/assets/doctors/dr-fatima.jpg';
-// import drKarimImg from '@/assets/doctors/dr-karim.jpg';
+import drFatimaImg from '@/assets/doctors/dr-fatima.jpg';
+import drKarimImg from '@/assets/doctors/dr-karim.jpg';
+import drNazneenImg from '@/assets/doctors/dr-nazneen.jpg';
+import drHossainImg from '@/assets/doctors/dr-hossain.jpg';
 
 // ============================================================================
 // DOCTORS DATA - Add/Edit/Remove doctors here

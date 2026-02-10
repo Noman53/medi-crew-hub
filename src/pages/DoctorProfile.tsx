@@ -365,22 +365,22 @@ const DoctorProfile: React.FC = () => {
               </motion.a>
             </motion.div>
 
-            {/* Image - RIGHT side, smaller */}
+            {/* Image - RIGHT side, aligned center like hero */}
             <motion.div
-              className="relative flex justify-center lg:justify-end order-1 lg:order-2"
+              className="relative flex justify-center order-1 lg:order-2"
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ duration: 0.5 }}
             >
-              <div className="w-56 h-64 sm:w-64 sm:h-72 md:w-72 md:h-80 rounded-2xl overflow-hidden shadow-xl">
+              <div className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full overflow-hidden shadow-xl border-4 border-primary/15">
                 <img
                   src={doctor.photo}
                   alt={language === 'en' ? doctor.name_en : doctor.name_bn}
                   className="w-full h-full object-cover object-top"
                 />
               </div>
-              <div className="absolute -bottom-4 -left-4 w-20 h-20 sm:w-24 sm:h-24 bg-primary/10 rounded-2xl -z-10" />
+              <div className="absolute -bottom-4 -right-4 w-20 h-20 sm:w-24 sm:h-24 bg-primary/10 rounded-full -z-10" />
             </motion.div>
           </div>
         </div>
