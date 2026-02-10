@@ -16,12 +16,13 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
       <div className="doctor-card bg-card border border-border rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300">
         {/* Circular Image Container */}
         <div className="flex justify-center pt-8 pb-4 bg-gradient-to-b from-primary/5 to-transparent">
-          <div className="w-36 h-36 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-primary/15 shadow-lg group-hover:border-primary/30 transition-all duration-300">
-            <img
-              src={doctor.photo}
-              alt={language === 'en' ? doctor.name_en : doctor.name_bn}
-              className="w-full h-full object-cover object-top"
-            />
+           {/* Circular image - automatically adapts to any uploaded photo */}
+           <div className="w-36 h-36 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-primary/15 shadow-lg group-hover:border-primary/30 transition-all duration-300 bg-secondary">
+             <img
+               src={doctor.photo}
+               alt={language === 'en' ? doctor.name_en : doctor.name_bn}
+               className="w-full h-full object-cover object-top"
+             />
           </div>
         </div>
 
