@@ -184,9 +184,9 @@ const DoctorProfile: React.FC = () => {
               </motion.div>
             </motion.div>
 
-            {/* Right Content - Doctor Image with Title Card BELOW - Larger and more to left */}
+            {/* Right Content - Doctor Image with Title Card BELOW */}
             <motion.div
-              className="relative flex flex-col items-center lg:items-start order-1 lg:order-2"
+              className="relative flex flex-col items-center order-1 lg:order-2"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -194,7 +194,7 @@ const DoctorProfile: React.FC = () => {
               {/* Decorative blur circle */}
               <div className="absolute w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full bg-gradient-to-br from-primary/20 to-accent/10 blur-3xl -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
 
-              {/* Doctor Image - Larger circular with proper sizing */}
+              {/* Doctor Image - Circular */}
               <div className="w-52 h-52 sm:w-60 sm:h-60 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl bg-secondary">
                 <img
                   src={doctor.photo}
@@ -203,9 +203,9 @@ const DoctorProfile: React.FC = () => {
                 />
               </div>
 
-              {/* Info Card - Positioned BELOW the image, matching width */}
+              {/* Info Card - BELOW image, dynamic width to show all content */}
               <motion.div
-                className="glass-menu rounded-xl p-4 shadow-lg mt-5 w-52 sm:w-60 md:w-72 lg:w-80"
+                className="glass-menu rounded-xl p-4 shadow-lg mt-5 w-full max-w-xs sm:max-w-sm"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.4 }}
@@ -215,10 +215,10 @@ const DoctorProfile: React.FC = () => {
                     <Stethoscope className="w-5 h-5 text-primary-foreground" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className={`font-bold text-foreground text-base leading-tight truncate ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    <p className={`font-bold text-foreground text-base leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
                       {language === 'en' ? doctor.name_en : doctor.name_bn}
                     </p>
-                    <p className={`text-sm text-primary leading-tight truncate ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    <p className={`text-sm text-primary leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
                       {language === 'en' ? doctor.specialist_en : doctor.specialist_bn}
                     </p>
                   </div>
@@ -365,22 +365,22 @@ const DoctorProfile: React.FC = () => {
               </motion.a>
             </motion.div>
 
-            {/* Image - RIGHT side, smaller */}
+            {/* Image - RIGHT side, aligned center like hero */}
             <motion.div
-              className="relative flex justify-center lg:justify-end order-1 lg:order-2"
+              className="relative flex justify-center order-1 lg:order-2"
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ duration: 0.5 }}
             >
-              <div className="w-56 h-64 sm:w-64 sm:h-72 md:w-72 md:h-80 rounded-2xl overflow-hidden shadow-xl">
+              <div className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full overflow-hidden shadow-xl border-4 border-primary/15">
                 <img
                   src={doctor.photo}
                   alt={language === 'en' ? doctor.name_en : doctor.name_bn}
                   className="w-full h-full object-cover object-top"
                 />
               </div>
-              <div className="absolute -bottom-4 -left-4 w-20 h-20 sm:w-24 sm:h-24 bg-primary/10 rounded-2xl -z-10" />
+              <div className="absolute -bottom-4 -right-4 w-20 h-20 sm:w-24 sm:h-24 bg-primary/10 rounded-full -z-10" />
             </motion.div>
           </div>
         </div>

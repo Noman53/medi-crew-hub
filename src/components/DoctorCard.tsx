@@ -13,40 +13,40 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
 
   return (
     <Link to={`/doctor/${doctor.slug}`} className="group block">
-      <div className="doctor-card bg-card border border-border overflow-hidden">
-        {/* Image Container */}
-        <div className="relative overflow-hidden">
-          <div className="aspect-[4/3] overflow-hidden">
+      <div className="doctor-card bg-card border border-border rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300">
+        {/* Circular Image Container */}
+        <div className="flex justify-center pt-8 pb-4 bg-gradient-to-b from-primary/5 to-transparent">
+          <div className="w-36 h-36 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-primary/15 shadow-lg group-hover:border-primary/30 transition-all duration-300">
             <img
               src={doctor.photo}
               alt={language === 'en' ? doctor.name_en : doctor.name_bn}
-              className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
+              className="w-full h-full object-cover object-top"
             />
-          </div>
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-foreground/90 via-foreground/40 to-transparent" />
-          
-          {/* Doctor Info Overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 text-background">
-            <p className={`text-lg font-bold leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
-              {language === 'en' ? doctor.name_en : doctor.name_bn}
-            </p>
-            <p className={`text-sm text-background/80 mt-0.5 ${language === 'bn' ? 'font-bangla' : ''}`}>
-              {language === 'en' ? doctor.title_en : doctor.title_bn}
-            </p>
           </div>
         </div>
 
         {/* Card Content */}
-        <div className="p-4 space-y-3">
+        <div className="px-5 pb-6 text-center space-y-3">
+          {/* Doctor Name & Title */}
+          <div>
+            <p className={`text-lg font-bold text-foreground leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
+              {language === 'en' ? doctor.name_en : doctor.name_bn}
+            </p>
+            <p className={`text-sm text-muted-foreground mt-1 ${language === 'bn' ? 'font-bangla' : ''}`}>
+              {language === 'en' ? doctor.title_en : doctor.title_bn}
+            </p>
+          </div>
+
           {/* Specialist Badge */}
-          <div className="badge-teal text-xs">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-            </svg>
-            <span className={language === 'bn' ? 'font-bangla' : ''}>
-              {language === 'en' ? doctor.specialist_en : doctor.specialist_bn}
-            </span>
+          <div className="flex justify-center">
+            <div className="badge-teal text-xs">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+              </svg>
+              <span className={language === 'bn' ? 'font-bangla' : ''}>
+                {language === 'en' ? doctor.specialist_en : doctor.specialist_bn}
+              </span>
+            </div>
           </div>
 
           {/* Institution */}
@@ -55,8 +55,8 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
           </p>
 
           {/* View Profile Button */}
-          <div className="pt-2">
-            <span className={`inline-flex items-center gap-2 text-sm font-medium text-primary group-hover:gap-3 transition-all duration-300 ${language === 'bn' ? 'font-bangla' : ''}`}>
+          <div className="pt-1">
+            <span className={`inline-flex items-center gap-2 text-sm font-semibold text-primary group-hover:gap-3 transition-all duration-300 ${language === 'bn' ? 'font-bangla' : ''}`}>
               {t('View Profile', 'প্রোফাইল দেখুন')}
               <ArrowRight className="w-4 h-4" />
             </span>
