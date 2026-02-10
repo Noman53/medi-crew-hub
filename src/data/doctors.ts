@@ -629,8 +629,8 @@ export const doctors: Doctor[] = [
     hero_description_en: "Dr. Rafiqul Hossain provides modern neurological treatment. Expert care for stroke, epilepsy, and headache disorders.",
     badges: [{ text: "MRCP (UK)" }, { text: "FACP" }, { text: "Stroke Specialist" }],
     specialties: [
-      { id: "stroke", name_bn: "স্ট্রোক", name_en: "Stroke Treatment", description_bn: "স্ট্রোকের জরুরি ও পুনর্বাসন চিকিৎসা।", description_en: "Emergency and rehabilitation stroke care.", icon: "ecg" },
-      { id: "epilepsy", name_bn: "মৃগী রোগ", name_en: "Epilepsy", description_bn: "মৃগী রোগের আধুনিক ওষুধ ও ব্যবস্থাপনা।", description_en: "Modern medication and management for epilepsy.", icon: "ecg" },
+      { id: "stroke", name_bn: "স্ট্রোক", name_en: "Stroke Treatment", description_bn: "স্ট্রোকের জরুরি ও পুনর্বাসন চিকিৎসা।", description_en: "Emergency and rehabilitation stroke care.", icon: "brain" },
+      { id: "epilepsy", name_bn: "মৃগী রোগ", name_en: "Epilepsy", description_bn: "মৃগী রোগের আধুনিক ওষুধ ও ব্যবস্থাপনা।", description_en: "Modern medication and management for epilepsy.", icon: "brain" },
       { id: "headache", name_bn: "মাথাব্যথা", name_en: "Headache Disorders", description_bn: "মাইগ্রেন ও দীর্ঘস্থায়ী মাথাব্যথার চিকিৎসা।", description_en: "Treatment for migraine and chronic headache.", icon: "ecg" },
     ],
     chamber: {
