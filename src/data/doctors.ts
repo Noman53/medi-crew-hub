@@ -420,7 +420,7 @@ export const doctors: Doctor[] = [
     specialist_en: "Interventional Cardiologist",
     
     // Photo - TODO: Replace with actual photo
-    photo: drMuhsinImg,  // Using placeholder - import actual photo and update
+    photo: drFatimaImg,
     
     // Biography
     bio_bn: "ডা. ফাতিমা রহমান একজন অভিজ্ঞ কার্ডিওলজিস্ট যিনি হৃদরোগ নির্ণয় ও চিকিৎসায় বিশেষজ্ঞ। তিনি এনজিওপ্লাস্টি, স্টেন্ট স্থাপন এবং হৃদযন্ত্রের জটিল পদ্ধতিতে দক্ষ।",
