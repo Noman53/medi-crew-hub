@@ -577,7 +577,7 @@ export const doctors: Doctor[] = [
     hero_description_en: "Dr. Nazneen Akter provides comprehensive women's health care. Modern treatment for pregnancy, delivery, and gynecological conditions.",
     badges: [{ text: "FCPS (Gynae)" }, { text: "Reproductive Medicine" }],
     specialties: [
-      { id: "pregnancy", name_bn: "উচ্চ ঝুঁকি গর্ভাবস্থা", name_en: "High-Risk Pregnancy", description_bn: "জটিল গর্ভাবস্থার বিশেষজ্ঞ ব্যবস্থাপনা।", description_en: "Specialized management of complex pregnancies.", icon: "heart" },
+      { id: "pregnancy", name_bn: "উচ্চ ঝুঁকি গর্ভাবস্থা", name_en: "High-Risk Pregnancy", description_bn: "জটিল গর্ভাবস্থার বিশেষজ্ঞ ব্যবস্থাপনা।", description_en: "Specialized management of complex pregnancies.", icon: "baby" },
       { id: "laparoscopy", name_bn: "ল্যাপারোস্কপি", name_en: "Laparoscopy", description_bn: "ন্যূনতম আক্রমণাত্মক গাইনি সার্জারি।", description_en: "Minimally invasive gynecological surgery.", icon: "ecg" },
       { id: "fertility", name_bn: "বন্ধ্যাত্ব চিকিৎসা", name_en: "Fertility Treatment", description_bn: "বন্ধ্যাত্বের আধুনিক চিকিৎসা।", description_en: "Modern fertility treatment options.", icon: "heart" },
     ],
