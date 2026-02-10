@@ -525,8 +525,8 @@ export const doctors: Doctor[] = [
     hero_description_en: "Dr. Abdul Karim provides modern orthopedic surgical care. Expert treatment for spine, knee, and hip conditions.",
     badges: [{ text: "FRCS (Edinburgh)" }, { text: "AO Spine Fellow" }, { text: "Spine Specialist" }],
     specialties: [
-      { id: "spine", name_bn: "মেরুদণ্ড", name_en: "Spine Surgery", description_bn: "মেরুদণ্ডের জটিল অবস্থার অস্ত্রোপচার চিকিৎসা।", description_en: "Surgical treatment for complex spinal conditions.", icon: "hernia" },
-      { id: "knee", name_bn: "হাঁটু প্রতিস্থাপন", name_en: "Knee Replacement", description_bn: "আর্থ্রাইটিসের জন্য টোটাল নি রিপ্লেসমেন্ট।", description_en: "Total knee replacement for arthritis.", icon: "hernia" },
+      { id: "spine", name_bn: "মেরুদণ্ড", name_en: "Spine Surgery", description_bn: "মেরুদণ্ডের জটিল অবস্থার অস্ত্রোপচার চিকিৎসা।", description_en: "Surgical treatment for complex spinal conditions.", icon: "bone" },
+      { id: "knee", name_bn: "হাঁটু প্রতিস্থাপন", name_en: "Knee Replacement", description_bn: "আর্থ্রাইটিসের জন্য টোটাল নি রিপ্লেসমেন্ট।", description_en: "Total knee replacement for arthritis.", icon: "bone" },
       { id: "trauma", name_bn: "ট্রমা কেয়ার", name_en: "Trauma Care", description_bn: "ফ্র্যাকচার ও আঘাতের জরুরি অস্ত্রোপচার।", description_en: "Emergency surgery for fractures and injuries.", icon: "appendix" },
     ],
     chamber: {
@@ -577,7 +577,7 @@ export const doctors: Doctor[] = [
     hero_description_en: "Dr. Nazneen Akter provides comprehensive women's health care. Modern treatment for pregnancy, delivery, and gynecological conditions.",
     badges: [{ text: "FCPS (Gynae)" }, { text: "Reproductive Medicine" }],
     specialties: [
-      { id: "pregnancy", name_bn: "উচ্চ ঝুঁকি গর্ভাবস্থা", name_en: "High-Risk Pregnancy", description_bn: "জটিল গর্ভাবস্থার বিশেষজ্ঞ ব্যবস্থাপনা।", description_en: "Specialized management of complex pregnancies.", icon: "heart" },
+      { id: "pregnancy", name_bn: "উচ্চ ঝুঁকি গর্ভাবস্থা", name_en: "High-Risk Pregnancy", description_bn: "জটিল গর্ভাবস্থার বিশেষজ্ঞ ব্যবস্থাপনা।", description_en: "Specialized management of complex pregnancies.", icon: "baby" },
       { id: "laparoscopy", name_bn: "ল্যাপারোস্কপি", name_en: "Laparoscopy", description_bn: "ন্যূনতম আক্রমণাত্মক গাইনি সার্জারি।", description_en: "Minimally invasive gynecological surgery.", icon: "ecg" },
       { id: "fertility", name_bn: "বন্ধ্যাত্ব চিকিৎসা", name_en: "Fertility Treatment", description_bn: "বন্ধ্যাত্বের আধুনিক চিকিৎসা।", description_en: "Modern fertility treatment options.", icon: "heart" },
     ],
@@ -629,8 +629,8 @@ export const doctors: Doctor[] = [
     hero_description_en: "Dr. Rafiqul Hossain provides modern neurological treatment. Expert care for stroke, epilepsy, and headache disorders.",
     badges: [{ text: "MRCP (UK)" }, { text: "FACP" }, { text: "Stroke Specialist" }],
     specialties: [
-      { id: "stroke", name_bn: "স্ট্রোক", name_en: "Stroke Treatment", description_bn: "স্ট্রোকের জরুরি ও পুনর্বাসন চিকিৎসা।", description_en: "Emergency and rehabilitation stroke care.", icon: "ecg" },
-      { id: "epilepsy", name_bn: "মৃগী রোগ", name_en: "Epilepsy", description_bn: "মৃগী রোগের আধুনিক ওষুধ ও ব্যবস্থাপনা।", description_en: "Modern medication and management for epilepsy.", icon: "ecg" },
+      { id: "stroke", name_bn: "স্ট্রোক", name_en: "Stroke Treatment", description_bn: "স্ট্রোকের জরুরি ও পুনর্বাসন চিকিৎসা।", description_en: "Emergency and rehabilitation stroke care.", icon: "brain" },
+      { id: "epilepsy", name_bn: "মৃগী রোগ", name_en: "Epilepsy", description_bn: "মৃগী রোগের আধুনিক ওষুধ ও ব্যবস্থাপনা।", description_en: "Modern medication and management for epilepsy.", icon: "brain" },
       { id: "headache", name_bn: "মাথাব্যথা", name_en: "Headache Disorders", description_bn: "মাইগ্রেন ও দীর্ঘস্থায়ী মাথাব্যথার চিকিৎসা।", description_en: "Treatment for migraine and chronic headache.", icon: "ecg" },
     ],
     chamber: {
