@@ -396,14 +396,19 @@ const DoctorProfile: React.FC = () => {
               viewport={{ once: true, margin: '-80px' }}
               transition={{ duration: 0.5 }}
             >
-              <div className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full overflow-hidden shadow-xl border-4 border-primary/15">
-                <img
-                  src={doctor.photo}
-                  alt={language === 'en' ? doctor.name_en : doctor.name_bn}
-                  className="w-full h-full object-cover object-top"
-                />
+              {/* About image - Rounded rectangle with decorative elements */}
+              <div className="relative">
+                <div className="w-56 h-64 sm:w-64 sm:h-72 md:w-72 md:h-80 rounded-2xl overflow-hidden shadow-2xl border-4 border-primary/15 mx-auto">
+                  <img
+                    src={doctor.photo}
+                    alt={language === 'en' ? doctor.name_en : doctor.name_bn}
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
+                {/* Decorative accent shapes */}
+                <div className="absolute -bottom-3 -right-3 w-24 h-24 sm:w-28 sm:h-28 bg-primary/10 rounded-2xl -z-10" />
+                <div className="absolute -top-3 -left-3 w-16 h-16 sm:w-20 sm:h-20 bg-accent/10 rounded-2xl -z-10" />
               </div>
-              <div className="absolute -bottom-4 -right-4 w-20 h-20 sm:w-24 sm:h-24 bg-primary/10 rounded-full -z-10" />
             </motion.div>
           </div>
         </div>
