@@ -525,8 +525,8 @@ export const doctors: Doctor[] = [
     hero_description_en: "Dr. Abdul Karim provides modern orthopedic surgical care. Expert treatment for spine, knee, and hip conditions.",
     badges: [{ text: "FRCS (Edinburgh)" }, { text: "AO Spine Fellow" }, { text: "Spine Specialist" }],
     specialties: [
-      { id: "spine", name_bn: "মেরুদণ্ড", name_en: "Spine Surgery", description_bn: "মেরুদণ্ডের জটিল অবস্থার অস্ত্রোপচার চিকিৎসা।", description_en: "Surgical treatment for complex spinal conditions.", icon: "hernia" },
-      { id: "knee", name_bn: "হাঁটু প্রতিস্থাপন", name_en: "Knee Replacement", description_bn: "আর্থ্রাইটিসের জন্য টোটাল নি রিপ্লেসমেন্ট।", description_en: "Total knee replacement for arthritis.", icon: "hernia" },
+      { id: "spine", name_bn: "মেরুদণ্ড", name_en: "Spine Surgery", description_bn: "মেরুদণ্ডের জটিল অবস্থার অস্ত্রোপচার চিকিৎসা।", description_en: "Surgical treatment for complex spinal conditions.", icon: "bone" },
+      { id: "knee", name_bn: "হাঁটু প্রতিস্থাপন", name_en: "Knee Replacement", description_bn: "আর্থ্রাইটিসের জন্য টোটাল নি রিপ্লেসমেন্ট।", description_en: "Total knee replacement for arthritis.", icon: "bone" },
       { id: "trauma", name_bn: "ট্রমা কেয়ার", name_en: "Trauma Care", description_bn: "ফ্র্যাকচার ও আঘাতের জরুরি অস্ত্রোপচার।", description_en: "Emergency surgery for fractures and injuries.", icon: "appendix" },
     ],
     chamber: {
