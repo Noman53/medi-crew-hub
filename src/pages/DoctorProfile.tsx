@@ -76,6 +76,29 @@ const getSpecialtyIcon = (iconName: string) => {
         <path d="M12 8v4" />
       </svg>
     ),
+    bone: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7">
+        <path d="M7 4c-1.5 0-3 1-3 3s1.5 3 3 3h10c1.5 0 3-1 3-3s-1.5-3-3-3" />
+        <path d="M7 14c-1.5 0-3 1-3 3s1.5 3 3 3h10c1.5 0 3-1 3-3s-1.5-3-3-3" />
+        <path d="M10 10v4" />
+        <path d="M14 10v4" />
+      </svg>
+    ),
+    brain: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7">
+        <path d="M12 2C8 2 5 5 5 9c0 2 .8 3.8 2 5.2V20a2 2 0 002 2h6a2 2 0 002-2v-5.8c1.2-1.4 2-3.2 2-5.2 0-4-3-7-7-7z" />
+        <path d="M9 10h6" />
+        <path d="M12 7v6" />
+      </svg>
+    ),
+    baby: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-7 h-7">
+        <circle cx="12" cy="8" r="5" />
+        <path d="M7 13c0 4 2.2 7 5 7s5-3 5-7" />
+        <circle cx="10" cy="7" r="0.5" fill="currentColor" />
+        <circle cx="14" cy="7" r="0.5" fill="currentColor" />
+      </svg>
+    ),
   };
   return icons[iconName] || icons.ecg;
 };
