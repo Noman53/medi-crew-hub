@@ -129,7 +129,7 @@ const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="mt-10 pt-6 border-t border-background/10">
-          <div className="flex-col sm:flex-row gap-3 flex items-center justify-between">
+          <div className="flex-col gap-3 sm:flex-row flex items-center justify-between">
             <p className={`text-xs text-background/50 ${language === 'bn' ? 'font-bangla' : ''}`}>
               © {new Date().getFullYear()}{' '}
               {currentDoctor ?
