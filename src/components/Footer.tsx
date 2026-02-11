@@ -138,9 +138,9 @@ const Footer: React.FC = () => {
               }. {t('All rights reserved.', 'সর্বস্বত্ব সংরক্ষিত।')}
             </p>
             <div className="flex gap-5">
-              <a href="#" className={`text-xs text-background/50 hover:text-primary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}>
-                {t('Privacy Policy', 'গোপনীয়তা নীতি')}
-              </a>
+              
+
+
               
 
 
