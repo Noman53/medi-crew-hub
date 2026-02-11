@@ -6,7 +6,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 const Footer: React.FC = () => {
   const { language, t } = useLanguage();
-  const { slug } = useParams<{ slug: string }>();
+  const { slug } = useParams<{slug: string;}>();
   const currentDoctor = slug ? getDoctorBySlug(slug) : null;
 
   return (
@@ -23,8 +23,8 @@ const Footer: React.FC = () => {
                 </svg>
               </div>
               <div className="min-w-0">
-                {currentDoctor ? (
-                  <>
+                {currentDoctor ?
+                <>
                     <p className={`text-base font-bold text-background leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
                       {language === 'en' ? currentDoctor.name_en : currentDoctor.name_bn}
                     </p>
@@ -34,12 +34,12 @@ const Footer: React.FC = () => {
                     <p className={`text-xs text-background/50 mt-0.5 ${language === 'bn' ? 'font-bangla' : ''}`}>
                       {language === 'en' ? currentDoctor.institution_en : currentDoctor.institution_bn}
                     </p>
-                  </>
-                ) : (
-                  <p className={`text-base font-bold text-background ${language === 'bn' ? 'font-bangla' : ''}`}>
+                  </> :
+
+                <p className={`text-base font-bold text-background ${language === 'bn' ? 'font-bangla' : ''}`}>
                     {t('Doctor Directory', 'ডাক্তার ডিরেক্টরি')}
                   </p>
-                )}
+                }
               </div>
             </div>
             <div className="flex gap-3 pt-2">
@@ -61,10 +61,10 @@ const Footer: React.FC = () => {
               {t('Quick Links', 'দ্রুত লিঙ্ক')}
             </h4>
             <ul className="space-y-2">
-              {currentDoctor ? (
-                <>
+              {currentDoctor ?
+              <>
                   <li>
-                    <a href="#top" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`text-sm text-background/70 hover:text-primary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    <a href="#top" onClick={(e) => {e.preventDefault();window.scrollTo({ top: 0, behavior: 'smooth' });}} className={`text-sm text-background/70 hover:text-primary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}>
                       {t('Home', 'হোম')}
                     </a>
                   </li>
@@ -72,15 +72,15 @@ const Footer: React.FC = () => {
                   <li><a href="#services" className={`text-sm text-background/70 hover:text-primary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}>{t('Specialties', 'বিশেষত্ব')}</a></li>
                   <li><a href="#locations" className={`text-sm text-background/70 hover:text-primary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}>{t('Chamber', 'চেম্বার')}</a></li>
                   <li><a href="#booking" className={`text-sm text-background/70 hover:text-primary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}>{t('Book Appointment', 'অ্যাপয়েন্টমেন্ট')}</a></li>
-                </>
-              ) : (
-                <>
+                </> :
+
+              <>
                   <li><Link to="/" className={`text-sm text-background/70 hover:text-primary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}>{t('Home', 'হোম')}</Link></li>
                   <li><a href="#doctors" className={`text-sm text-background/70 hover:text-primary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}>{t('Our Doctors', 'আমাদের ডাক্তার')}</a></li>
                   <li><a href="#" className={`text-sm text-background/70 hover:text-primary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}>{t('About Us', 'আমাদের সম্পর্কে')}</a></li>
                   <li><a href="#" className={`text-sm text-background/70 hover:text-primary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}>{t('Contact', 'যোগাযোগ')}</a></li>
                 </>
-              )}
+              }
             </ul>
           </div>
 
@@ -90,8 +90,8 @@ const Footer: React.FC = () => {
               {t('Contact', 'যোগাযোগ')}
             </h4>
             <ul className="space-y-3">
-              {currentDoctor ? (
-                <>
+              {currentDoctor ?
+              <>
                   <li className="flex items-start gap-3">
                     <Phone className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
                     <a href={`tel:${currentDoctor.contact.phone}`} className="text-sm text-background/70 hover:text-primary transition-colors">
@@ -104,9 +104,9 @@ const Footer: React.FC = () => {
                       {language === 'en' ? currentDoctor.chamber.address_en : currentDoctor.chamber.address_bn}
                     </span>
                   </li>
-                </>
-              ) : (
-                <>
+                </> :
+
+              <>
                   <li className="flex items-start gap-3">
                     <Phone className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
                     <span className="text-sm text-background/70">+880 1234 567890</span>
@@ -122,7 +122,7 @@ const Footer: React.FC = () => {
                     </span>
                   </li>
                 </>
-              )}
+              }
             </ul>
           </div>
         </div>
@@ -132,24 +132,24 @@ const Footer: React.FC = () => {
           <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
             <p className={`text-xs text-background/50 ${language === 'bn' ? 'font-bangla' : ''}`}>
               © {new Date().getFullYear()}{' '}
-              {currentDoctor
-                ? (language === 'en' ? currentDoctor.name_en : currentDoctor.name_bn)
-                : t('Doctor Directory', 'ডাক্তার ডিরেক্টরি')
+              {currentDoctor ?
+              language === 'en' ? currentDoctor.name_en : currentDoctor.name_bn :
+              t('Doctor Directory', 'ডাক্তার ডিরেক্টরি')
               }. {t('All rights reserved.', 'সর্বস্বত্ব সংরক্ষিত।')}
             </p>
             <div className="flex gap-5">
               <a href="#" className={`text-xs text-background/50 hover:text-primary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}>
                 {t('Privacy Policy', 'গোপনীয়তা নীতি')}
               </a>
-              <a href="#" className={`text-xs text-background/50 hover:text-primary transition-colors ${language === 'bn' ? 'font-bangla' : ''}`}>
-                {t('Terms of Service', 'সেবার শর্তাবলী')}
-              </a>
+              
+
+
             </div>
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>);
+
 };
 
 export default Footer;
