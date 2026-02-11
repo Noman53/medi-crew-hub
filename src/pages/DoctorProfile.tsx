@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useParams, Navigate, useLocation } from 'react-router-dom';
 import { getDoctorBySlug } from '@/data/doctors';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -11,6 +11,7 @@ import {
   Award,
   CheckCircle,
   Stethoscope,
+  ArrowUp,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import FloatingContactIcons from '@/components/FloatingContactIcons';
@@ -123,12 +124,17 @@ const DoctorProfile: React.FC = () => {
   const { language, t } = useLanguage();
   const location = useLocation();
 
+  // Use key-based remount via slug to force fresh render on doctor switch
   const doctor = getDoctorBySlug(slug || '');
 
   // Scroll to top on route change
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+  }, [slug]);
+
+  const scrollToTop = useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [location.pathname]);
+  }, []);
 
   if (!doctor) {
     return <Navigate to="/" replace />;
@@ -140,11 +146,11 @@ const DoctorProfile: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background" id="top">
+    <div className="min-h-screen bg-background" key={slug} id="top">
       {/* Floating Contact Icons - Dynamic per doctor */}
       <FloatingContactIcons phone={doctor.contact.phone} whatsapp={doctor.contact.whatsapp} />
 
-      {/* Hero Section - Larger image, positioned more to left */}
+      {/* Hero Section */}
       <section className="relative hero-gradient overflow-hidden min-h-[85vh] md:min-h-[80vh] flex items-center pt-20 md:pt-24">
         <div className="container mx-auto px-4 py-8 md:py-12">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
@@ -155,7 +161,6 @@ const DoctorProfile: React.FC = () => {
               animate="visible"
               variants={staggerContainer}
             >
-              {/* Title Badge */}
               <motion.div variants={fadeInUp} custom={0} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
                 <span className="w-2 h-2 rounded-full bg-primary" />
                 <span className={`text-sm font-medium text-primary uppercase tracking-wider ${language === 'bn' ? 'font-bangla tracking-normal' : ''}`}>
@@ -163,7 +168,6 @@ const DoctorProfile: React.FC = () => {
                 </span>
               </motion.div>
 
-              {/* Main Heading - Larger text */}
               <motion.h1 variants={fadeInUp} custom={1} className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
                 <span className="text-foreground">{t('Expert Care for', 'বিশেষজ্ঞ যত্ন')} </span>
                 <br className="hidden sm:block" />
@@ -174,12 +178,10 @@ const DoctorProfile: React.FC = () => {
                 </span>
               </motion.h1>
 
-              {/* Description - Larger text */}
               <motion.p variants={fadeInUp} custom={2} className={`text-base sm:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed ${language === 'bn' ? 'font-bangla' : ''}`}>
                 {language === 'en' ? doctor.hero_description_en : doctor.hero_description_bn}
               </motion.p>
 
-              {/* CTA Buttons - Larger */}
               <motion.div variants={fadeInUp} custom={3} className="flex flex-wrap gap-4 pt-2 justify-center lg:justify-start">
                 <a
                   href="#booking"
@@ -196,7 +198,6 @@ const DoctorProfile: React.FC = () => {
                 </a>
               </motion.div>
 
-              {/* Badges */}
               <motion.div variants={fadeInUp} custom={4} className="flex flex-wrap gap-x-5 gap-y-2 pt-4 justify-center lg:justify-start">
                 {doctor.badges.map((badge, index) => (
                   <div key={index} className="flex items-center gap-2 text-muted-foreground">
@@ -209,15 +210,13 @@ const DoctorProfile: React.FC = () => {
 
             {/* Right Content - Doctor Image with Title Card BELOW */}
             <motion.div
-              className="relative flex flex-col items-center order-1 lg:order-2"
+              className="relative flex flex-col items-center lg:items-end order-1 lg:order-2"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
             >
-              {/* Decorative blur circle */}
               <div className="absolute w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full bg-gradient-to-br from-primary/20 to-accent/10 blur-3xl -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
 
-              {/* Doctor Image - Circular */}
               <div className="w-52 h-52 sm:w-60 sm:h-60 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl bg-secondary">
                 <img
                   src={doctor.photo}
@@ -226,9 +225,9 @@ const DoctorProfile: React.FC = () => {
                 />
               </div>
 
-              {/* Info Card - BELOW image, dynamic width to show all content */}
+              {/* Info Card - dynamic width */}
               <motion.div
-                className="glass-menu rounded-xl p-4 shadow-lg mt-5 w-full max-w-xs sm:max-w-sm"
+                className="glass-menu rounded-xl p-4 shadow-lg mt-5 w-auto max-w-full"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.4 }}
@@ -237,12 +236,15 @@ const DoctorProfile: React.FC = () => {
                   <div className="w-11 h-11 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
                     <Stethoscope className="w-5 h-5 text-primary-foreground" />
                   </div>
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0">
                     <p className={`font-bold text-foreground text-base leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
                       {language === 'en' ? doctor.name_en : doctor.name_bn}
                     </p>
-                    <p className={`text-sm text-primary leading-tight ${language === 'bn' ? 'font-bangla' : ''}`}>
+                    <p className={`text-sm text-primary leading-tight mt-0.5 ${language === 'bn' ? 'font-bangla' : ''}`}>
                       {language === 'en' ? doctor.specialist_en : doctor.specialist_bn}
+                    </p>
+                    <p className={`text-xs text-muted-foreground leading-tight mt-0.5 ${language === 'bn' ? 'font-bangla' : ''}`}>
+                      {language === 'en' ? doctor.institution_en : doctor.institution_bn}
                     </p>
                   </div>
                 </div>
@@ -330,7 +332,7 @@ const DoctorProfile: React.FC = () => {
         </div>
       </section>
 
-      {/* About Doctor Section - Image on RIGHT, smaller, qualifications in 2 columns */}
+      {/* About Doctor Section */}
       <section className="py-12 md:py-16 bg-secondary/30" id="about">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
@@ -362,12 +364,12 @@ const DoctorProfile: React.FC = () => {
                 {language === 'en' ? doctor.bio_en : doctor.bio_bn}
               </motion.p>
 
-              {/* Qualifications - 2 column grid with checkmark circles */}
+              {/* Qualifications */}
               <motion.div variants={fadeInUp} className="pt-3">
                 <h3 className={`text-lg font-bold mb-4 ${language === 'bn' ? 'font-bangla' : ''}`}>
                   {t('Qualifications & Degrees', 'যোগ্যতা ও ডিগ্রি')}
                 </h3>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {doctor.qualifications.map((qual, index) => (
                     <div key={index} className="flex items-center gap-3">
                       <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -388,17 +390,18 @@ const DoctorProfile: React.FC = () => {
               </motion.a>
             </motion.div>
 
-            {/* Image - RIGHT side, aligned center like hero */}
+            {/* Image - RIGHT side with animated border */}
             <motion.div
-              className="relative flex justify-center order-1 lg:order-2"
+              className="relative flex justify-center lg:justify-end order-1 lg:order-2"
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ duration: 0.5 }}
             >
-              {/* About image - Rounded rectangle with decorative elements */}
               <div className="relative">
-                <div className="w-56 h-64 sm:w-64 sm:h-72 md:w-72 md:h-80 rounded-2xl overflow-hidden shadow-2xl border-4 border-primary/15 mx-auto">
+                {/* Animated glow border */}
+                <div className="absolute -inset-2 rounded-2xl bg-gradient-to-br from-primary/30 via-accent/20 to-primary/10 animate-pulse-glow opacity-60 blur-sm" />
+                <div className="relative w-60 h-72 sm:w-72 sm:h-80 md:w-80 md:h-[22rem] rounded-2xl overflow-hidden shadow-2xl border-4 border-primary/15">
                   <img
                     src={doctor.photo}
                     alt={language === 'en' ? doctor.name_en : doctor.name_bn}
@@ -466,7 +469,7 @@ const DoctorProfile: React.FC = () => {
         </div>
       </section>
 
-      {/* Chamber/Location Section with Google Map - Dynamic per doctor */}
+      {/* Chamber/Location Section */}
       <section className="py-12 md:py-16 bg-secondary/30" id="locations">
         <div className="container mx-auto px-4">
           <motion.div
@@ -495,7 +498,6 @@ const DoctorProfile: React.FC = () => {
               viewport={{ once: true, margin: '-80px' }}
               variants={staggerContainer}
             >
-              {/* Chamber Info Card - Dynamic from doctor.chamber */}
               <motion.div variants={fadeInUp} className="card-elevated p-6 sm:p-8 flex flex-col">
                 <h3 className={`text-lg sm:text-xl font-bold mb-5 ${language === 'bn' ? 'font-bangla' : ''}`}>
                   {language === 'en' ? doctor.chamber.name_en : doctor.chamber.name_bn}
@@ -557,7 +559,6 @@ const DoctorProfile: React.FC = () => {
                 </a>
               </motion.div>
 
-              {/* Google Map Embed - Dynamic per doctor */}
               <motion.div variants={fadeInUp} className="card-elevated overflow-hidden min-h-[280px] lg:min-h-0">
                 <iframe
                   title={`${doctor.chamber.name_en} Location`}
@@ -574,7 +575,7 @@ const DoctorProfile: React.FC = () => {
         </div>
       </section>
 
-      {/* Booking Section - Dynamic per doctor */}
+      {/* Booking Section */}
       <section className="py-12 md:py-16 bg-background" id="booking">
         <div className="container mx-auto px-4">
           <motion.div
@@ -595,11 +596,23 @@ const DoctorProfile: React.FC = () => {
             </p>
           </motion.div>
 
-          {/* Booking wizard uses doctor's custom booking_config */}
           <BookingWizard
             doctorName={language === 'en' ? doctor.name_en : doctor.name_bn}
             bookingConfig={doctor.booking_config}
           />
+        </div>
+      </section>
+
+      {/* Back to Top Button */}
+      <section className="py-8 bg-background">
+        <div className="container mx-auto px-4 flex justify-center">
+          <button
+            onClick={scrollToTop}
+            className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-semibold text-base"
+          >
+            <ArrowUp className="w-5 h-5 group-hover:-translate-y-1 transition-transform duration-300" />
+            {t('Back to Top', 'উপরে যান')}
+          </button>
         </div>
       </section>
     </div>
